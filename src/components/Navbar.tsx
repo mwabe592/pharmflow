@@ -1,5 +1,4 @@
 import { createClient } from "@/app/utils/supabase/server";
-import { Button } from "./ui/button";
 import React from "react";
 import LogoutButton from "./LogoutButton";
 import { ThemeToggle } from "./ThemeToggle";

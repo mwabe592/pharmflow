@@ -11,6 +11,20 @@ export type UserAccreditation = {
   id: string;
   expiry_date: Date;
   file_path: string | null;
-  service_accreditations: { name: string };
+  fileUrl: string | null;
+  service_accreditations: { name: string }[];
   isExpired: boolean;
+};
+
+export type ExpiringAccreditations = {
+  service_accreditations: any;
+  id: string;
+  expiry_date: Date;
+  serviceName: {
+    name: string;
+  };
+  staff: {
+    first_name: string;
+    last_name: string;
+  };
 };

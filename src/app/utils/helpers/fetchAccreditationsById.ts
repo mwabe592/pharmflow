@@ -9,13 +9,13 @@ export async function fetchAccreditationsById(staffId: string) {
     .from("staff_accreditations")
     .select(
       `
-    id, 
-    expiry_date, 
-    file_path, 
-    service_accreditations:service_accreditation_id (
-      name
-    )
-  `
+      id,
+      expiry_date,
+      file_path,
+      service_accreditations:service_accreditation_id (
+        name
+      )
+    `
     )
     .eq("staff_id", staffId);
 
@@ -23,18 +23,34 @@ export async function fetchAccreditationsById(staffId: string) {
     throw new Error(error.message);
   }
 
-  console.log("Raw first item:", JSON.stringify(accreditationData[0], null, 2));
+  // Create an array of promises for generating signed URLs
+  const accreditationPromises = accreditationData.map(async (accreditation) => {
+    let signedUrl = null;
 
-  const accreditationsWithExpiration = accreditationData.map(
-    (accreditation) => {
-      // console.log("current date is", currentDate);
-      return {
-        ...accreditation,
-        isExpired: accreditation.expiry_date < currentDate,
-      };
+    if (accreditation.file_path) {
+      // Make sure to use the actual file path from the accreditation
+      const { data } = await supabase.storage
+        .from("accreditation-certificates")
+        .createSignedUrl(accreditation.file_path, 3600);
+
+      if (data) {
+        signedUrl = data.signedUrl;
+      }
+
+      console.log("signed urls are:", signedUrl);
     }
-  );
 
-  console.log("acc with expiries are:", accreditationsWithExpiration);
+    return {
+      ...accreditation,
+      isExpired: accreditation.expiry_date < currentDate,
+      fileUrl: signedUrl, // Store the signed URL in a new property
+    };
+  });
+
+  // Wait for all promises to resolve
+  const accreditationsWithExpiration = await Promise.all(accreditationPromises);
+
+  // console.log("fileUrls are:", accreditationsWithExpiration);
+
   return accreditationsWithExpiration as UserAccreditation[];
 }

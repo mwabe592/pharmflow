@@ -13,6 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, FileText, MoreHorizontal } from "lucide-react";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import Link from "next/link";
 
 export const columns: ColumnDef<UserAccreditation>[] = [
   {
@@ -109,22 +110,24 @@ export const columns: ColumnDef<UserAccreditation>[] = [
     },
   },
   {
-    accessorKey: "file_path",
+    accessorKey: "fileUrl",
     header: "Certificate",
     cell: ({ row }) => {
-      const filePath = row.original.file_path;
+      const fileUrl = row.original.fileUrl;
 
       return (
         <div>
-          {filePath ? (
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1"
-            >
-              <FileText className="h-4 w-4" />
-              View
-            </Button>
+          {fileUrl ? (
+            <Link href={`${fileUrl}`} target="_blank">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1"
+              >
+                <FileText className="h-4 w-4" />
+                View
+              </Button>
+            </Link>
           ) : (
             <span className="text-muted-foreground text-sm">No file</span>
           )}

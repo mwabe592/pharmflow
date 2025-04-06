@@ -1,5 +1,21 @@
 "use client";
 
+import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import {
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { ChevronDown, Search, ArrowUpDown } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -10,23 +26,95 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Staff } from "@/app/types/staffTypes";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  CardTitle,
+} from "@/components/ui/card"; // ShadCN Card imports
+import type { Staff } from "@/app/types/staffTypes";
 
-interface StaffTableProps {
+interface StaffDataTableProps {
   staffData: Staff[];
 }
 
-export function StaffTable({ staffData }: StaffTableProps) {
+export function StaffTable({ staffData }: StaffDataTableProps) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
+  // Define columns
+  const columns: ColumnDef<Staff>[] = [
+    {
+      accessorFn: (row) => `${row.first_name} ${row.last_name}`,
+      id: "name",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="font-medium">{`${row.original.first_name} ${row.original.last_name}`}</div>
+      ),
+    },
+    {
+      accessorKey: "role",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Role
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => {
+        const status = row.original.status;
+        return (
+          <span
+            className={`inline-block px-2 py-1 text-xs rounded-full text-center ${
+              status === "active"
+                ? "bg-green-100 text-green-800"
+                : status === "On Leave"
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-red-200 text-gray-800"
+            }`}
+          >
+            {status}
+          </span>
+        );
+      },
+    },
+  ];
+
   // Filter staff based on search term
-  const filteredStaff: Staff[] = useMemo(() => {
+  const filteredData = useMemo(() => {
     if (!staffData) return [];
 
     if (searchTerm.trim() === "") {
@@ -35,7 +123,7 @@ export function StaffTable({ staffData }: StaffTableProps) {
 
     const lowercasedSearch = searchTerm.toLowerCase();
     return staffData.filter(
-      (staffMember: Staff) =>
+      (staffMember) =>
         `${staffMember.first_name} ${staffMember.last_name}`
           .toLowerCase()
           .includes(lowercasedSearch) ||
@@ -44,81 +132,160 @@ export function StaffTable({ staffData }: StaffTableProps) {
     );
   }, [staffData, searchTerm]);
 
+  // start the table here
+  const table = useReactTable({
+    data: filteredData,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
   // Reset search and show all staff
   const handleShowAll = () => {
     setSearchTerm("");
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-3">
-        <CardTitle>Staff Directory</CardTitle>
-        <div className="flex flex-col sm:flex-row gap-3 items-center mt-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Search staff..."
-              className="pl-8 w-full"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+    <div className="w-full bg-card">
+      <Card className="space-y-1">
+        <CardHeader>
+          <CardTitle>Staff</CardTitle>
+          <div className="flex items-center ">
+            <div className="relative flex-1 max-w-sm">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search staff..."
+                className="pl-8 w-full"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <Button
+              variant="outline"
+              onClick={handleShowAll}
+              className="ml-2 whitespace-nowrap"
+            >
+              Show All
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  Columns <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-          <Button
-            variant="outline"
-            onClick={handleShowAll}
-            className="whitespace-nowrap"
-          >
-            Show All
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="p-4">Name</TableHead>
-              <TableHead className="p-4">Role</TableHead>
-              <TableHead className="p-4">Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredStaff.length > 0 ? (
-              filteredStaff.map((staffMember) => (
-                <TableRow
-                  key={staffMember.staff_id}
-                  className="hover:bg-gray-100 cursor-pointer"
-                  onClick={() => router.push(`/staff/${staffMember.staff_id}`)}
-                >
-                  <TableCell className="font-medium p-4">
-                    {`${staffMember.first_name} ${staffMember.last_name}`}
-                  </TableCell>
-                  <TableCell className="p-4">{staffMember.role}</TableCell>
-                  <TableCell className="p-4">
-                    <span
-                      className={`inline-block px-2 py-1 text-xs rounded-full ${
-                        staffMember.status === "active"
-                          ? "bg-green-100 text-green-800"
-                          : staffMember.status === "On Leave"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-red-200 text-gray-800"
-                      }`}
-                    >
-                      {staffMember.status}
-                    </span>
+        </CardHeader>
+        <CardContent className="overflow-hidden rounded-md border">
+          <Table>
+            <TableHeader>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <TableHead key={header.id} className="p-4">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                table.getRowModel().rows.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    className="cursor-pointer"
+                    onClick={() =>
+                      router.push(`/staff/${row.original.staff_id}`)
+                    }
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id} className="p-4">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-24 text-center"
+                  >
+                    No results found.
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={3} className="h-24 text-center">
-                  No results found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+        <CardFooter>
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex-1 text-sm text-muted-foreground">
+              {table.getFilteredRowModel().rows.length} staff member(s) found.
+            </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

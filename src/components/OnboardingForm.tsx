@@ -12,12 +12,15 @@ export default function OnboardingForm() {
   const handleFormSubmit = async (formData: FormData) => {
     try {
       await completeonboarding(formData);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error completing onboarding:", error);
+      return;
+    }
   };
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
       {/* Form */}
-      <form action={completeonboarding}>
+      <form action={handleFormSubmit}>
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="first-name">First Name</Label>

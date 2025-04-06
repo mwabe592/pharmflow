@@ -61,7 +61,7 @@ export const handleAccreditationUpload = async (
     accreditationId = newAccreditation.id;
   }
 
-  const { data: uploadData, error: dbError } = await supabase
+  const { error: dbError } = await supabase
     .from("staff_accreditations")
     .insert([
       {

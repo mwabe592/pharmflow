@@ -13,5 +13,5 @@ export const fetchStaffById = async (staffId: string) => {
     throw new Error(error.message);
   }
 
-  return staffData;
+  return staffData as Staff;
 };

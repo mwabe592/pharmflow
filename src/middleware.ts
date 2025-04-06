@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   //   return NextResponse.redirect("/login"); // If not logged in, send to login
   // }
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("profiles")
     .select("profile_completed")
     .eq("id", user?.id) // Filter by the user's ID

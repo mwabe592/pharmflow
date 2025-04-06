@@ -1,7 +1,4 @@
-import React from "react";
 import { createClient } from "../supabase/server";
-import { profile } from "console";
-import { fetchServicesByPharmacy } from "./fetchServicesByPharmacy";
 
 async function fetchPharmacyId() {
   const supabase = await createClient();

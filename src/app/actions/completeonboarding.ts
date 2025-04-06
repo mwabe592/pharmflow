@@ -98,11 +98,10 @@ const completeonboarding = async (formData: FormData) => {
 
       if (profileUpdateError) throw new Error(profileUpdateError?.message);
     }
-    
+
     // Redirect to the dashboard after successful completion
     revalidatePath("/dashboard");
     redirect("/dashboard");
-    
   } catch (err) {
     console.error("Error updating role:", err);
     // You can either return an error or redirect to an error page
