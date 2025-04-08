@@ -36,8 +36,6 @@ export async function fetchAccreditationsById(staffId: string) {
       if (data) {
         signedUrl = data.signedUrl;
       }
-
-      console.log("signed urls are:", signedUrl);
     }
 
     return {
@@ -49,8 +47,6 @@ export async function fetchAccreditationsById(staffId: string) {
 
   // Wait for all promises to resolve
   const accreditationsWithExpiration = await Promise.all(accreditationPromises);
-
-  // console.log("fileUrls are:", accreditationsWithExpiration);
 
   return accreditationsWithExpiration as UserAccreditation[];
 }

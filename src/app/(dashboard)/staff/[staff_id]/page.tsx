@@ -8,18 +8,14 @@ import { AccreditationUploadFormModal } from "@/components/AccreditationUploadFo
 import { UserAccreditationTable } from "@/components/user-accreditation-table/UserAccreditationTable";
 import { columns } from "@/components/user-accreditation-table/columns";
 
-type StaffProfileProps = Promise<{
+type StaffProfileProps = {
   params: {
     staff_id: string;
   };
-}>;
+};
 
-export default async function StaffProfilePage({
-  params,
-}: {
-  params: StaffProfileProps;
-}) {
-  const { staff_id } = (await params).params;
+export default async function StaffProfilePage({ params }: StaffProfileProps) {
+  const { staff_id } = await params;
 
   const staffMember: Staff = await fetchStaffById(staff_id);
   const services = await fetchServices();

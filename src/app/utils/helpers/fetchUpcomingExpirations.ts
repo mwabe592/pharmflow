@@ -1,4 +1,4 @@
-import { ExpiringAccreditations } from "@/app/types/accreditationTypes";
+import { ExpiringAccreditation } from "@/app/types/accreditationTypes";
 import { createClient } from "../supabase/server";
 
 export async function fetchUpcomingExpirations() {
@@ -9,39 +9,29 @@ export async function fetchUpcomingExpirations() {
   thirtyDaysFromNow.setDate(thirtyDaysFromNow.getDate() + 30);
   const futureDate = thirtyDaysFromNow.toISOString().split("T")[0];
 
-  const { data: expiringData, error } = await supabase.rpc("sql_query", {
-    query: `
-      SELECT
-        sa.id,
-        sa.expiry_date,
-        sa.service_accreditation_id,
-        sa.staff_id,
-        sa.file_path,
-        sa.created_at,
-        sa.updated_at,
-        s.first_name,
-        s.last_name,
-        s.email,
-        sa.name as service_accreditation_name
-      FROM staff_accreditations sa
-      JOIN staff s ON sa.staff_id = s.staff_id
-      LEFT JOIN service_accreditations sa2 ON sa.service_accreditation_id = sa2.id
-      WHERE sa.expiry_date BETWEEN $1 AND $2
-    `,
-    params: [currentDate, futureDate], // replace with actual dates
-  });
+  const { data: expiringData, error } = await supabase
+    .from("staff_accreditations")
+    .select(
+      `
+    id,
+    expiry_date,
+    service_accreditations (name),
+    staff ( first_name, last_name)
+  `
+    )
+    .gte("expiry_date", currentDate)
+    .lte("expiry_date", futureDate)
+    .limit(2);
 
-  if (error) {
-    console.error("Error executing raw SQL:", error);
-  } else {
-    console.log("Query results:", expiringData);
+  if (!expiringData || error) {
+    console.error("Error fetching expiring data:", error);
+    return [];
   }
-
-  const formattedData = expiringData.map((data: ExpiringAccreditations) => ({
+  const formattedData = expiringData.map((data) => ({
     expiryDate: new Date(data.expiry_date).toLocaleDateString(),
     serviceName: data.service_accreditations.name,
     staffName: `${data.staff.first_name} ${data.staff.last_name}`,
   }));
 
-  return formattedData as ExpiringAccreditations[];
+  return formattedData as ExpiringAccreditation[];
 }
