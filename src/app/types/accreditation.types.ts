@@ -7,15 +7,6 @@ export interface Accreditations {
   staff_id: string;
 }
 
-export type UserAccreditation = {
-  id: string;
-  expiry_date: Date;
-  file_path: string | null;
-  fileUrl: string | null;
-  service_accreditations: { name: string };
-  isExpired: boolean;
-};
-
 export type ExpiringAccreditation = {
   id: string;
   expiry_date: string;
@@ -26,4 +17,15 @@ export type ExpiringAccreditation = {
     last_name: string;
     first_name: string;
   };
+};
+
+export type UserAccreditation = {
+  isExpired: boolean;
+  fileUrl: string | null;
+  id: string;
+  expiry_date: string;
+  file_path: string | null;
+  service_accreditations: {
+    name: string;
+  } | null;
 };

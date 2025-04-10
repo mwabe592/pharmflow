@@ -6,19 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarClock, ChevronRight, AlertCircle } from "lucide-react";
 
-type ExpirationData = {
-  expiryDate: string;
-  serviceName: string;
-  staffName: string;
-};
+import type { FormattedExpiringData } from "@/app/utils/helpers/fetchUpcomingExpirations";
 
-type UpcomingExpirationsCardProps = {
-  data: ExpirationData[];
+type UpcomingExpirartionsProps = {
+  data: FormattedExpiringData[];
 };
-
-export function UpcomingExpirationsCard({
-  data,
-}: UpcomingExpirationsCardProps) {
+export function UpcomingExpirationsCard({ data }: UpcomingExpirartionsProps) {
   const [expanded, setExpanded] = useState(false);
 
   // Sort by expiry date (closest first)
@@ -87,8 +80,8 @@ export function UpcomingExpirationsCard({
                       {daysUntil === 0
                         ? "Expires today"
                         : daysUntil < 0
-                        ? "Expired"
-                        : `${daysUntil} day${daysUntil === 1 ? "" : "s"} left`}
+                          ? "Expired"
+                          : `${daysUntil} day${daysUntil === 1 ? "" : "s"} left`}
                     </p>
                   </div>
                   {isUrgent && <AlertCircle className="h-4 w-4 text-red-500" />}

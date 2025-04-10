@@ -1,11 +1,22 @@
-import { UserAccreditation } from "@/app/types/accreditationTypes";
 import { createClient } from "../supabase/server";
+import { QueryData } from "@supabase/supabase-js";
+
+type UserAccreditation = {
+  isExpired: boolean;
+  fileUrl: string | null;
+  id: string;
+  expiry_date: string;
+  file_path: string | null;
+  service_accreditations: {
+    name: string;
+  } | null;
+};
 
 export async function fetchAccreditationsById(staffId: string) {
   const supabase = await createClient();
   const currentDate = new Date().toISOString().split("T")[0];
 
-  const { data: accreditationData, error } = await supabase
+  const accreditationsQuery = supabase
     .from("staff_accreditations")
     .select(
       `
@@ -19,33 +30,34 @@ export async function fetchAccreditationsById(staffId: string) {
     )
     .eq("staff_id", staffId);
 
-  if (error) {
-    throw new Error(error.message);
-  }
+  type AccreditationData = QueryData<typeof accreditationsQuery>;
 
-  // Create an array of promises for generating signed URLs
+  const { data, error } = await accreditationsQuery;
+
+  if (!data || error) {
+    throw new Error(error?.message || "Failed to fetch accreditations");
+  }
+  const accreditationData: AccreditationData = data;
   const accreditationPromises = accreditationData.map(async (accreditation) => {
-    let signedUrl = null;
+    let signedUrl: string | null = null;
 
     if (accreditation.file_path) {
-      // Make sure to use the actual file path from the accreditation
-      const { data } = await supabase.storage
+      const { data: signedData } = await supabase.storage
         .from("accreditation-certificates")
         .createSignedUrl(accreditation.file_path, 3600);
 
-      if (data) {
-        signedUrl = data.signedUrl;
+      if (signedData) {
+        signedUrl = signedData.signedUrl;
       }
     }
 
     return {
       ...accreditation,
       isExpired: accreditation.expiry_date < currentDate,
-      fileUrl: signedUrl, // Store the signed URL in a new property
+      fileUrl: signedUrl,
     };
   });
 
-  // Wait for all promises to resolve
   const accreditationsWithExpiration = await Promise.all(accreditationPromises);
 
   return accreditationsWithExpiration as UserAccreditation[];

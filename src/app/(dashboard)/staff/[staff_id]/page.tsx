@@ -1,6 +1,6 @@
 // app/staff/[staff_id]/page.tsx
 
-import { Staff } from "@/app/types/staffTypes";
+import { Staff } from "@/app/types/staff.types";
 import { fetchAccreditationsById } from "@/app/utils/helpers/fetchAccreditationsById";
 import { fetchServices } from "@/app/utils/helpers/fetchServices";
 import { fetchStaffById } from "@/app/utils/helpers/fetchStaffById";

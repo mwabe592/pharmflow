@@ -1,5 +1,7 @@
-
+import { Tables } from "@/app/types/database.types";
 import { createClient } from "../supabase/server";
+
+type Staff = Tables<"staff">;
 
 export const fetchStaff = async () => {
   const supabase = await createClient();
@@ -9,5 +11,5 @@ export const fetchStaff = async () => {
     throw new Error(error.message);
   }
 
-  return staffData;
+  return staffData as Staff[];
 };

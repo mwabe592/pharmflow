@@ -1,5 +1,5 @@
 "use client";
-import { UserAccreditation } from "@/app/types/accreditationTypes";
+import { UserAccreditation } from "@/app/types/accreditation.types";
 import { Checkbox } from "@radix-ui/react-checkbox";
 import {
   DropdownMenu,

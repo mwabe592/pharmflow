@@ -32,9 +32,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-import { UserAccreditation } from "@/app/types/accreditationTypes";
 import { columns } from "./columns";
+import { UserAccreditation } from "@/app/types/accreditation.types";
 import { Card } from "../ui/card";
 
 export function UserAccreditationTable({

@@ -68,6 +68,8 @@ export function AccreditationUploadFormModal({
       console.error("Error uploading accreditation:", response.error);
       return;
     }
+
+    setIsModalOpen(false);
   };
 
   return (

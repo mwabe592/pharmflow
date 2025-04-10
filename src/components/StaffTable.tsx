@@ -39,13 +39,13 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card"; // ShadCN Card imports
-import type { Staff } from "@/app/types/staffTypes";
+import type { Staff } from "@/app/types/staff.types";
 
-interface StaffDataTableProps {
+type StaffTableProps = {
   staffData: Staff[];
-}
+};
 
-export function StaffTable({ staffData }: StaffDataTableProps) {
+export function StaffTable({ staffData }: StaffTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -101,9 +101,9 @@ export function StaffTable({ staffData }: StaffDataTableProps) {
             className={`inline-block px-2 py-1 text-xs rounded-full text-center ${
               status === "active"
                 ? "bg-green-100 text-green-800"
-                : status === "On Leave"
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-red-200 text-gray-800"
+                : status === "on leave"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-red-200 text-gray-800"
             }`}
           >
             {status}
