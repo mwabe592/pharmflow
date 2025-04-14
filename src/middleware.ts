@@ -15,11 +15,12 @@ export async function middleware(request: NextRequest) {
       .single(); // Ensure you get a single result (not an array)
 
     if (data && !data.profile_completed) {
-      return NextResponse.redirect("/onboarding");
+      return NextResponse.redirect(new URL("/onboarding", request.url));
     }
     await updateSession(request);
   } else {
-    NextResponse.redirect("/login"); // If not logged in, send to login
+    // If not logged in, send to login
+    NextResponse.redirect(new URL("/login", request.url));
   }
 }
 
