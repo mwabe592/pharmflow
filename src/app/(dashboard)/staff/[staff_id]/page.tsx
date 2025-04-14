@@ -1,6 +1,4 @@
-// app/staff/[staff_id]/page.tsx
-
-import { Staff } from "@/app/types/staff.types";
+import { Staff } from "@/app/types/tables.types";
 import { fetchAccreditationsById } from "@/app/utils/helpers/fetchAccreditationsById";
 import { fetchServices } from "@/app/utils/helpers/fetchServices";
 import { fetchStaffById } from "@/app/utils/helpers/fetchStaffById";
@@ -9,9 +7,9 @@ import { UserAccreditationTable } from "@/components/user-accreditation-table/Us
 import { columns } from "@/components/user-accreditation-table/columns";
 
 type StaffProfileProps = {
-  params: {
+  params: Promise<{
     staff_id: string;
-  };
+  }>;
 };
 
 export default async function StaffProfilePage({ params }: StaffProfileProps) {

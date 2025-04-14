@@ -1,4 +1,3 @@
-import { createClient } from "../supabase/server";
 import { fetchExpiringAccreditationsWithin } from "./fetchExpAccWIthin";
 
 export type FormattedExpiringData = {
@@ -10,9 +9,6 @@ export type FormattedExpiringData = {
 export async function fetchUpcomingExpirations() {
   const expiringAccreditationWithin30Days =
     await fetchExpiringAccreditationsWithin(30);
-
-  const supabase = await createClient();
-  const reminderSent = await supabase;
 
   const formattedData: FormattedExpiringData[] =
     expiringAccreditationWithin30Days.map((d) => ({

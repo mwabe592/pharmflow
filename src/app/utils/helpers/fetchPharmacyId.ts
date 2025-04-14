@@ -5,15 +5,24 @@ async function fetchPharmacyId() {
 
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser();
 
-  const { data: pharmacyData, error } = await supabase
+  if (authError) {
+    throw new Error(`Auth error: ${authError.message}`);
+  }
+
+  if (!user) {
+    throw new Error("No authenticated user found.");
+  }
+
+  const { data: pharmacyData, error: profileError } = await supabase
     .from("profiles")
     .select("pharmacy_id")
-    .eq("id", user?.id)
+    .eq("id", user.id)
     .single();
 
-  if (error || !pharmacyData) {
+  if (profileError || !pharmacyData) {
     throw new Error("Error fetching user profile.");
   }
 

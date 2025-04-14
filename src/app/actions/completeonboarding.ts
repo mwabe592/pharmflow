@@ -21,11 +21,8 @@ const completeonboarding = async (formData: FormData) => {
   // Extract form values
   const firstName = formData.get("first-name")?.toString();
   const lastName = formData.get("last-name")?.toString();
-  const pharmacyName = formData.get("pharmacy_name")?.toString();
   const pharmacyId = formData.get("pharmacy_id")?.toString();
   const role = formData.get("role")?.toString().toLowerCase() || "";
-
-  console.log("pharmacy id and name:", pharmacyId, pharmacyName);
 
   try {
     // If role is "manager", update profiles table
@@ -64,7 +61,7 @@ const completeonboarding = async (formData: FormData) => {
         const { error: staffError } = await supabase
           .from("staff")
           .update({ role, pharmacy_id: `${pharmacyId}` })
-          .eq("id", existingStaff.id);
+          .eq("id", existingStaff.staff_id);
 
         if (staffError) throw new Error(staffError.message);
 
@@ -72,7 +69,7 @@ const completeonboarding = async (formData: FormData) => {
         const { error: profileCompleteError } = await supabase
           .from("profiles")
           .update({ profile_completed: true })
-          .eq("id", existingStaff.profile_id);
+          .eq("id", existingStaff.staff_id);
 
         if (profileCompleteError) throw new Error(profileCompleteError.message);
       } else {
@@ -81,12 +78,12 @@ const completeonboarding = async (formData: FormData) => {
           .from("staff")
           .insert({
             profile_id: user?.id,
-            first_name: firstName,
-            last_name: lastName,
+            first_name: firstName!,
+            last_name: lastName!,
             pharmacy_id: `${pharmacyId}`,
-            role: role,
+            role,
+            status: "active",
           });
-
         if (createStaffError) throw new Error(createStaffError.message);
       }
 

@@ -54,7 +54,7 @@ export const columns: ColumnDef<UserAccreditation>[] = [
     },
     cell: ({ row }) => {
       // Access nested property
-      const name = row.original.service_accreditations.name;
+      const name = row.original.service_accreditations?.name;
 
       console.log(name);
       return <div>{name}</div>;

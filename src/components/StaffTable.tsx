@@ -39,7 +39,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card"; // ShadCN Card imports
-import type { Staff } from "@/app/types/staff.types";
+import type { Staff } from "@/app/types/tables.types";
 
 type StaffTableProps = {
   staffData: Staff[];

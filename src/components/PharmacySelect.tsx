@@ -20,24 +20,17 @@ import { Input } from "./ui/input";
 import { cn } from "@/app/lib/utils";
 import { useEffect, useState } from "react";
 import { getPharmacies } from "@/app/actions/getpharmacies";
-
-interface Pharmacy {
-  id: number;
-  name: string;
-  address: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Pharmacies } from "@/app/types/tables.types";
 
 const PharmacySelect = () => {
   const [open, setOpen] = useState(false);
-  const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacy | null>(
+  const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacies | null>(
     null
   );
-  const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
+  const [pharmacies, setPharmacies] = useState<Pharmacies[]>([]);
   useEffect(() => {
     const getData = async () => {
-      const pharmacies: Pharmacy[] = await getPharmacies();
+      const pharmacies: Pharmacies[] = await getPharmacies();
       setPharmacies(pharmacies);
     };
     getData();

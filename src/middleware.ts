@@ -7,21 +7,20 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // if (!user) {
-  //   return NextResponse.redirect("/login"); // If not logged in, send to login
-  // }
+  if (user) {
+    const { data } = await supabase
+      .from("profiles")
+      .select("profile_completed")
+      .eq("id", user?.id) // Filter by the user's ID
+      .single(); // Ensure you get a single result (not an array)
 
-  const { data } = await supabase
-    .from("profiles")
-    .select("profile_completed")
-    .eq("id", user?.id) // Filter by the user's ID
-    .single(); // Ensure you get a single result (not an array)
-
-  if (data && !data.profile_completed) {
-    return NextResponse.redirect("/onboarding");
+    if (data && !data.profile_completed) {
+      return NextResponse.redirect("/onboarding");
+    }
+    await updateSession(request);
+  } else {
+    NextResponse.redirect("/login"); // If not logged in, send to login
   }
-
-  return await updateSession(request);
 }
 
 export const config = {

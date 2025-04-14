@@ -1,4 +1,3 @@
-import { Tables } from "@/app/types/database.types";
 import { fetchExpiringAccreditationsWithin } from "@/app/utils/helpers/fetchExpAccWIthin";
 import { createClient } from "@/app/utils/supabase/server";
 import { EmailTemplate } from "@/components/EmailTemplate";

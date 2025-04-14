@@ -1,4 +1,4 @@
-import { Staff } from "@/app/types/staff.types";
+import { Staff } from "@/app/types/tables.types";
 import { createClient } from "../supabase/server";
 
 export const fetchStaffById = async (staffId: string) => {
