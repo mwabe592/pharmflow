@@ -54,7 +54,7 @@ export function LoginForm({
               <Button
                 formAction={login}
                 type="submit"
-                className="w-full bg-black text-white cursor-pointer"
+                className="w-full bg-brand text-white cursor-pointer"
               >
                 Login
               </Button>
@@ -62,7 +62,10 @@ export function LoginForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
-              <Link href="/signup" className="underline underline-offset-4">
+              <Link
+                href="/signup"
+                className="underline underline-offset-4 hover:text-brand"
+              >
                 Sign up
               </Link>
             </div>

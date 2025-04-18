@@ -19,7 +19,7 @@ export function SignUpForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>
             Enter your email and password to create a new account
           </CardDescription>
@@ -47,7 +47,7 @@ export function SignUpForm({
               <Button
                 formAction={signup}
                 variant="outline"
-                className="w-full cursor-pointer"
+                className="w-full cursor-pointer bg-brand text-white"
               >
                 Sign Up
               </Button>
