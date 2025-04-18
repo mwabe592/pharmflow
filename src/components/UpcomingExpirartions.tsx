@@ -6,36 +6,30 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarClock, ChevronRight, AlertCircle } from "lucide-react";
 
-import type { FormattedExpiringData } from "@/app/utils/helpers/fetchUpcomingExpirations";
-
-type UpcomingExpirartionsProps = {
-  data: FormattedExpiringData[];
+type UpcomingExpirationsProps = {
+  data: {
+    expiryDate: string;
+    daysUntilExpiry: number;
+    serviceName: string | null;
+    staffName: string;
+  }[];
 };
-export function UpcomingExpirationsCard({ data }: UpcomingExpirartionsProps) {
+
+export function UpcomingExpirations({ data }: UpcomingExpirationsProps) {
   const [expanded, setExpanded] = useState(false);
 
-  // Sort by expiry date (closest first)
   const sortedData = [...data].sort(
     (a, b) =>
       new Date(a.expiryDate).getTime() - new Date(b.expiryDate).getTime()
   );
 
-  // Display all if expanded, otherwise just the first 3
   const displayData = expanded ? sortedData : sortedData.slice(0, 3);
-
-  // Calculate days until expiry
-  const getDaysUntil = (dateString: string) => {
-    const expiryDate = new Date(dateString);
-    const today = new Date();
-    const diffTime = expiryDate.getTime() - today.getTime();
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  };
 
   return (
     <Card className="w-full">
-      <CardHeader className="">
+      <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="">
+          <CardTitle>
             <CalendarClock className="mr-2 h-5 w-5 text-muted-foreground" />
             Upcoming Accreditation Expirations
           </CardTitle>
@@ -47,7 +41,7 @@ export function UpcomingExpirationsCard({ data }: UpcomingExpirartionsProps) {
       <CardContent>
         <div className="space-y-3">
           {displayData.map((item, index) => {
-            const daysUntil = getDaysUntil(item.expiryDate);
+            const daysUntil = item.daysUntilExpiry;
             const isUrgent = daysUntil <= 7;
 
             return (
@@ -68,7 +62,7 @@ export function UpcomingExpirationsCard({ data }: UpcomingExpirartionsProps) {
                         isUrgent ? "text-red-500" : ""
                       }`}
                     >
-                      {new Date(item.expiryDate).toLocaleDateString()}
+                      {item.expiryDate}
                     </p>
                     <p
                       className={`text-xs ${

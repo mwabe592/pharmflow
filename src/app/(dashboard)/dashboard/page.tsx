@@ -1,7 +1,7 @@
 import { StaffTable } from "@/components/StaffTable";
 import { fetchStaff } from "@/app/utils/helpers/fetchStaff";
 import { fetchUpcomingExpirations } from "@/app/utils/helpers/fetchUpcomingExpirations";
-import { UpcomingExpirationsCard } from "@/components/UpcomingExpirartions";
+import { UpcomingExpirations } from "@/components/UpcomingExpirartions";
 import TestButton from "@/components/TestButton";
 
 const DashboardPage = async () => {
@@ -11,7 +11,7 @@ const DashboardPage = async () => {
 
   return (
     <div className="w-full grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <UpcomingExpirationsCard data={upcomingExpirations} />
+      <UpcomingExpirations data={upcomingExpirations} />
       <StaffTable staffData={staffData} />
       <TestButton />
     </div>

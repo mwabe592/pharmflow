@@ -12,20 +12,19 @@ const Navbar = async () => {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    console.error("User not found!");
-    return null; // or return some fallback UI if no user is found
+    throw new Error("no user found");
   }
 
   // Fetch the staff profile associated with the user
   const { data: staffProfile, error: staffError } = await supabase
     .from("staff")
     .select("*")
-    .eq("profile_id", user.id)
+    .eq("profile_id", user?.id)
     .single();
 
   if (staffError) {
     console.error("Error fetching staff profile:", staffError.message);
-    return null; // or return fallback UI if the staff profile can't be fetched
+    throw new Error("no staff member found");
   }
 
   return (

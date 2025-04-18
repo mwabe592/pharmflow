@@ -100,7 +100,7 @@ export function StaffTable({ staffData }: StaffTableProps) {
           <span
             className={`inline-block px-2 py-1 text-xs rounded-full text-center ${
               status === "active"
-                ? "bg-green-100 text-green-800"
+                ? "bg-[#5E8E4B] text-white"
                 : status === "on leave"
                   ? "bg-yellow-100 text-yellow-800"
                   : "bg-red-200 text-gray-800"

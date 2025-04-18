@@ -22,23 +22,36 @@ export default function OnboardingForm() {
       {/* Form */}
       <form action={handleFormSubmit}>
         <div className="space-y-4">
+          {/* first name */}
           <div className="space-y-2">
             <Label htmlFor="first-name">First Name</Label>
             <Input
               id="first-name"
               name="first-name"
-              placeholder="Enter your name"
+              type="text"
+              placeholder="First Name"
               required
             />
           </div>
-
+          {/* last name */}
           <div className="space-y-2">
             <Label htmlFor="last-name">Last Name</Label>
             <Input
               id="last-name"
               name="last-name"
-              type="last-name"
-              placeholder="Enter your email"
+              type="text"
+              placeholder="Last Name"
+              required
+            />
+          </div>
+          {/* email */}
+          <div className="space-y-2">
+            <Label htmlFor="last-name">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
               required
             />
           </div>

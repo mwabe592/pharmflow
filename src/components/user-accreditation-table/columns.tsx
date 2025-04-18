@@ -15,7 +15,7 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import Link from "next/link";
 
-export const columns: ColumnDef<UserAccreditation>[] = [
+export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -98,10 +98,7 @@ export const columns: ColumnDef<UserAccreditation>[] = [
               Expired
             </Badge>
           ) : (
-            <Badge
-              variant="default"
-              className="bg-green-500 hover:bg-green-600"
-            >
+            <Badge variant="default" className="bg-brand hover:bg-green-600">
               Valid
             </Badge>
           )}

@@ -1,12 +1,14 @@
 import { LoginForm } from "@/components/LoginForm";
-import Logo from "@/components/Logo";
+import Image from "next/image";
+import logo from "../../../../public/logo.png";
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="mb-5 text-4xl">
-        <Logo />
+    <div className="flex flex-col min-h-svh w-full items-center justify-center">
+      <div className="mb-2">
+        <Image src={logo} alt="logo" width={400} height={400} />
       </div>
+
       <div className="w-full max-w-sm">
         <LoginForm />
       </div>

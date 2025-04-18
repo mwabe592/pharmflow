@@ -9,7 +9,7 @@ const LogoutButton = () => {
   };
 
   return (
-    <Button onClick={handleLogout} className="cursor-pointer">
+    <Button onClick={handleLogout} className="cursor-pointer bg-brand">
       Logout
     </Button>
   );

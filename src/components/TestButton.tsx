@@ -7,7 +7,7 @@ function TestButton() {
       console.log(response);
 
       const data = await response.json();
-      console.log(data);
+      console.log(data.message);
     } catch (error) {
       console.error(error);
     }
@@ -15,7 +15,7 @@ function TestButton() {
   return (
     <div>
       <button className="cursor-pointer bg-red-300" onClick={handleSendEmail}>
-        Test Button
+        Test Email
       </button>
     </div>
   );

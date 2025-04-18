@@ -4,7 +4,7 @@ import { fetchServices } from "@/app/utils/helpers/fetchServices";
 import { fetchStaffById } from "@/app/utils/helpers/fetchStaffById";
 import { AccreditationUploadFormModal } from "@/components/AccreditationUploadForm";
 import { UserAccreditationTable } from "@/components/user-accreditation-table/UserAccreditationTable";
-import { columns } from "@/components/user-accreditation-table/columns";
+import { UserAccreditationTableColumns } from "@/components/user-accreditation-table/columns";
 
 type StaffProfileProps = {
   params: Promise<{
@@ -23,7 +23,7 @@ export default async function StaffProfilePage({ params }: StaffProfileProps) {
     <div>
       <h1>{`${staffMember.first_name}`}</h1>
       <UserAccreditationTable
-        columns={columns}
+        columns={UserAccreditationTableColumns}
         data={accreditations}
         filterColumn="service_accreditations.name"
         filterPlaceholder="Filter services..."

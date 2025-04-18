@@ -11,7 +11,7 @@ export async function GET() {
     const supabase = await createClient();
 
     const expiringAccreditationWithin7Days =
-      await fetchExpiringAccreditationsWithin(30);
+      await fetchExpiringAccreditationsWithin(7);
 
     // Fetch accreditations with reminders already sent
     const { data: remindersSent } = await supabase
@@ -55,10 +55,12 @@ export async function GET() {
         accreditations: accreditationList,
       });
 
+      console.log("email content is:", firstName);
+
       // Send email to each employee
       const { error } = await resend.emails.send({
         from: "Accreditation Management <onboarding@resend.dev>",
-        to: "benmwangi123@gmail.com", // Send email to the actual staff email
+        to: ["benmwangi123@gmail.com"], // Send email to the actual staff email
         subject: `You have accreditations expiring soon!`,
         react: emailContent,
       });
