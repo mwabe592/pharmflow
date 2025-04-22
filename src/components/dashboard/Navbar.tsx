@@ -1,7 +1,7 @@
 import { createClient } from "@/app/utils/supabase/server";
 import React from "react";
-import LogoutButton from "./LogoutButton";
-import { ThemeToggle } from "./ThemeToggle";
+import LogoutButton from "../auth/LogoutButton";
+import { ThemeToggle } from "../ThemeToggle";
 
 const Navbar = async () => {
   const supabase = await createClient();

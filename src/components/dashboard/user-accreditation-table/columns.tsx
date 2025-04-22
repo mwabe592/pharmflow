@@ -11,8 +11,8 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, FileText, MoreHorizontal } from "lucide-react";
-import { Button } from "../ui/button";
-import { Badge } from "../ui/badge";
+import { Button } from "../../ui/button";
+import { Badge } from "../../ui/badge";
 import Link from "next/link";
 
 export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [

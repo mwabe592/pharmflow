@@ -1,7 +1,7 @@
 "use client";
 import { loginWithGoogle } from "@/app/actions/loginWithGoogle";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import Image from "next/image";
 
 const LoginWithGoogleBtn = () => {

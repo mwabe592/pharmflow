@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 
 export function SignUpForm({
   className,
@@ -47,10 +48,17 @@ export function SignUpForm({
               <Button
                 formAction={signup}
                 variant="outline"
-                className="w-full cursor-pointer bg-brand text-white"
+                className="w-full cursor-pointer bg-brand text-white  hover:bg-black hover:text-white"
               >
                 Sign Up
               </Button>
+
+              <Link
+                href="/login"
+                className="text-sm text-center  hover:underline hover:text-brand "
+              >
+                Back to login page
+              </Link>
             </div>
           </form>
         </CardContent>

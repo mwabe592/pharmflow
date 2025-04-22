@@ -20,7 +20,7 @@ interface ModalProps {
   footer?: ReactNode;
 }
 
-export function Modal({
+export function UploadModal({
   isOpen,
   onClose,
   title,

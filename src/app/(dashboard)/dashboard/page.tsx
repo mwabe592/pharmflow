@@ -1,7 +1,7 @@
-import { StaffTable } from "@/components/StaffTable";
+import { StaffTable } from "@/components/dashboard/StaffTable";
 import { fetchStaff } from "@/app/utils/helpers/fetchStaff";
 import { fetchUpcomingExpirations } from "@/app/utils/helpers/fetchUpcomingExpirations";
-import { UpcomingExpirations } from "@/components/UpcomingExpirartions";
+import { UpcomingExpirations } from "@/components/dashboard/UpcomingExpirations";
 import TestButton from "@/components/TestButton";
 
 const DashboardPage = async () => {

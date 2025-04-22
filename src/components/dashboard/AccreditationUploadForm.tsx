@@ -22,7 +22,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/app/lib/utils";
 import { handleAccreditationUpload } from "@/app/utils/helpers/handleAccreditationUpload";
-import { Modal } from "./Modal";
+import { UploadModal } from "./UploadModal";
 
 type Service = {
   id: string;
@@ -77,7 +77,7 @@ export function AccreditationUploadFormModal({
       <Button onClick={() => setIsModalOpen(true)}>
         Upload new accreditation
       </Button>
-      <Modal
+      <UploadModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Upload Accreditation"
@@ -198,7 +198,7 @@ export function AccreditationUploadFormModal({
             Upload Accreditation
           </Button>
         </form>
-      </Modal>
+      </UploadModal>
     </div>
   );
 }

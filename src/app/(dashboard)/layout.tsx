@@ -1,5 +1,5 @@
 import type React from "react";
-import { AppSidebar } from "@/components/AppSidebar";
+import { AppSidebar } from "@/components/dashboard/AppSidebar";
 import {
   SidebarProvider,
   SidebarTrigger,
@@ -14,7 +14,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/dashboard/Navbar";
 import { createClient } from "../utils/supabase/server";
 import { redirect } from "next/navigation";
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {

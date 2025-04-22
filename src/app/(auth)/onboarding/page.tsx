@@ -1,5 +1,5 @@
 "use server";
-import OnboardingForm from "@/components/OnboardingForm";
+import OnboardingForm from "@/components/auth/OnboardingForm";
 import React from "react";
 
 const page = () => {
