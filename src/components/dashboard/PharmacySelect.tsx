@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 import { cn } from "@/app/lib/utils";
 import { useEffect, useState } from "react";
 import { getPharmacies } from "@/app/actions/getpharmacies";

@@ -1,4 +1,4 @@
-import { Clock, CheckCircle, FileCheck, Shield, Award } from "lucide-react";
+import { Clock, CheckCircle, FileCheck, Shield } from "lucide-react";
 import FeatureCard from "./FeatureCard";
 import {
   Card,

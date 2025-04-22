@@ -6,8 +6,7 @@ import { Label } from "@/components/ui/label";
 import completeonboarding from "@/app/actions/completeonboarding";
 
 import RoleSelect from "./RoleSelect";
-import PharmacySelect from "./PharmacySelect";
-
+import PharmacySelect from "../dashboard/PharmacySelect";
 export default function OnboardingForm() {
   const handleFormSubmit = async (formData: FormData) => {
     try {
