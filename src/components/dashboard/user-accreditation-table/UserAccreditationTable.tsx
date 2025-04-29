@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -16,7 +17,6 @@ import {
 import { ChevronDown } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -32,20 +32,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { UserAccreditation } from "@/app/types/accreditation.types";
-import { Card, CardHeader, CardTitle, CardContent } from "../../ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { AccreditationUploadFormModal } from "../AccreditationUploadForm";
 
-export function UserAccreditationTable({
-  data,
-  columns,
-}: {
-  columns: ColumnDef<UserAccreditation>[];
+import { UserAccreditation } from "@/app/types/accreditation.types";
+
+import { Service } from "@/app/types/services.types";
+
+type UserAccreditationTableProps = {
   data: UserAccreditation[];
+  columns: ColumnDef<UserAccreditation>[];
+  services: Service[];
+  staffId: string;
   filterColumn?: string;
   filterPlaceholder?: string;
   showPagination?: boolean;
   pageSize?: number;
-}) {
+  onUploadSuccess: (newAccreditation: UserAccreditation) => void;
+};
+
+export function UserAccreditationTable({
+  data,
+  columns,
+  services,
+  staffId,
+  filterColumn = "service_accreditations.name",
+  filterPlaceholder = "Filter accreditations...",
+  showPagination = true,
+  onUploadSuccess,
+}: UserAccreditationTableProps) {
+  const [accreditations, setAccreditations] = useState(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -55,7 +71,7 @@ export function UserAccreditationTable({
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data,
+    data: accreditations,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -75,22 +91,26 @@ export function UserAccreditationTable({
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Accreditations</CardTitle>
+        <AccreditationUploadFormModal
+          services={services}
+          staffId={staffId}
+          onUploadSuccess={onUploadSuccess}
+        />
       </CardHeader>
       <CardContent>
         <div className="w-full">
           <div className="flex items-center py-4">
             <Input
-              placeholder="Filter accreditations..."
+              placeholder={filterPlaceholder}
               value={
-                (table
-                  .getColumn("service_accreditations.name")
-                  ?.getFilterValue() as string) ?? ""
+                (table.getColumn(filterColumn)?.getFilterValue() as string) ??
+                ""
               }
               onChange={(event) =>
                 table
-                  .getColumn("service_accreditations.name")
+                  .getColumn(filterColumn)
                   ?.setFilterValue(event.target.value)
               }
               className="max-w-sm"
@@ -105,20 +125,18 @@ export function UserAccreditationTable({
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
+                  .map((column) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -127,18 +145,16 @@ export function UserAccreditationTable({
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => {
-                      return (
-                        <TableHead key={header.id}>
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </TableHead>
-                      );
-                    })}
+                    {headerGroup.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableHead>
+                    ))}
                   </TableRow>
                 ))}
               </TableHeader>
@@ -172,30 +188,34 @@ export function UserAccreditationTable({
               </TableBody>
             </Table>
           </div>
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="flex-1 text-sm text-muted-foreground">
-              {table.getFilteredSelectedRowModel().rows.length} of{" "}
-              {table.getFilteredRowModel().rows.length} certificate(s) selected.
+
+          {showPagination && (
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="flex-1 text-sm text-muted-foreground">
+                {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} certificate(s)
+                selected.
+              </div>
+              <div className="space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
       </CardContent>
     </Card>

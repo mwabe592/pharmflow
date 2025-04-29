@@ -4,6 +4,8 @@ import { fetchUpcomingExpirations } from "@/app/utils/helpers/fetchUpcomingExpir
 import { UpcomingExpirations } from "@/components/dashboard/UpcomingExpirations";
 import TestButton from "@/components/TestButton";
 
+export const revalidate = 60;
+
 const DashboardPage = async () => {
   // Fetch staff data from the server
   const staffData = await fetchStaff();

@@ -2,10 +2,9 @@ import { Staff } from "@/app/types/tables.types";
 import { fetchAccreditationsById } from "@/app/utils/helpers/fetchAccreditationsById";
 import { fetchServices } from "@/app/utils/helpers/fetchServices";
 import { fetchStaffById } from "@/app/utils/helpers/fetchStaffById";
-import { AccreditationUploadFormModal } from "@/components/dashboard/AccreditationUploadForm";
 import { StaffProfileCard } from "@/components/dashboard/StaffProfileCard";
-import { UserAccreditationTable } from "@/components/dashboard/user-accreditation-table/UserAccreditationTable";
-import { UserAccreditationTableColumns } from "@/components/dashboard/user-accreditation-table/columns";
+import { UserAccreditationTableColumns } from "@/components/dashboard/user-accreditation-table/UserAccreditationTableColumns";
+import { UserAccreditationTableWrapper } from "@/components/dashboard/user-accreditation-table/UserAccreditationTableWrapper";
 
 type StaffProfileProps = {
   params: Promise<{
@@ -13,25 +12,23 @@ type StaffProfileProps = {
   }>;
 };
 
+export const revalidate = 60;
+
 export default async function StaffProfilePage({ params }: StaffProfileProps) {
   const { staff_id } = await params;
-
-  const staffMember: Staff = await fetchStaffById(staff_id);
   const services = await fetchServices();
+  const staffMember: Staff = await fetchStaffById(staff_id);
   const accreditations = await fetchAccreditationsById(staff_id);
 
   return (
     <div className="flex flex-col gap-5">
       <StaffProfileCard {...staffMember} />
-      <UserAccreditationTable
+      <UserAccreditationTableWrapper
+        initialAccreditations={accreditations}
         columns={UserAccreditationTableColumns}
-        data={accreditations}
-        filterColumn="service_accreditations.name"
-        filterPlaceholder="Filter services..."
-        showPagination={true}
-        pageSize={5}
+        services={services}
+        staffId={staff_id}
       />
-      <AccreditationUploadFormModal services={services} staffId={staff_id} />
     </div>
   );
 }

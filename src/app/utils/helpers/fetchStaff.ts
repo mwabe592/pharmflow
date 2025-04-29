@@ -3,6 +3,7 @@ import { createClient } from "../supabase/server";
 
 type Staff = Tables<"staff">;
 
+
 export const fetchStaff = async () => {
   const supabase = await createClient();
 

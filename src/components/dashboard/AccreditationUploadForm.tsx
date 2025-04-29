@@ -23,6 +23,8 @@ import { format } from "date-fns";
 import { cn } from "@/app/lib/utils";
 import { handleAccreditationUpload } from "@/app/utils/helpers/handleAccreditationUpload";
 import { UploadModal } from "./UploadModal";
+import { toast } from "sonner";
+import { UserAccreditation } from "@/app/types/accreditation.types";
 
 type Service = {
   id: string;
@@ -32,16 +34,18 @@ type Service = {
 type AccreditationUploadFormProps = {
   services: Service[];
   staffId: string;
+  onUploadSuccess: (newAccreditation: UserAccreditation) => void;
 };
 
-interface SelectedService {
+type SelectedService = {
   id: string;
   name: string;
-}
+};
 
 export function AccreditationUploadFormModal({
   services,
   staffId,
+  onUploadSuccess,
 }: AccreditationUploadFormProps) {
   const [date, setDate] = useState<Date>();
   const [fileName, setFileName] = useState<string>("");
@@ -69,6 +73,12 @@ export function AccreditationUploadFormModal({
       return;
     }
 
+    if (response.success) {
+      const newAccreditation = response.accreditation;
+      onUploadSuccess(newAccreditation);
+    }
+
+    toast("Your accreditation has been uploaded");
     setIsModalOpen(false);
   };
 

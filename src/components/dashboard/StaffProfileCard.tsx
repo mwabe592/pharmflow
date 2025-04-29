@@ -59,7 +59,7 @@ export function StaffProfileCard({
               {role && (
                 <Badge
                   variant="outline"
-                  className="bg-brand/10 text-brand border-brand/20"
+                  className="bg-brand/10 text-brand border-brand/20 font-bold"
                 >
                   {role}
                 </Badge>

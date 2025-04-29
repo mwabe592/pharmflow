@@ -1,11 +1,12 @@
 "use server";
 
+import { UserAccreditation } from "@/app/types/accreditation.types";
 import { createClient } from "../supabase/server";
 
-interface SelectedServiceProps {
+type SelectedServiceProps = {
   selectedService: { id: string; name: string };
   staffId: string;
-}
+};
 export const handleAccreditationUpload = async (
   formData: FormData,
   { selectedService, staffId }: SelectedServiceProps
@@ -22,6 +23,7 @@ export const handleAccreditationUpload = async (
     return { error: "All fields are required" };
   }
 
+  //Add file to storage
   const { data: fileData, error: fileError } = await supabase.storage
     .from("accreditation-certificates")
     .upload(`/certificates/${certificateFile.name}`, certificateFile);
@@ -61,6 +63,7 @@ export const handleAccreditationUpload = async (
     accreditationId = newAccreditation.id;
   }
 
+  //Add accreditation to database table
   const { error: dbError } = await supabase
     .from("staff_accreditations")
     .insert([
@@ -76,5 +79,23 @@ export const handleAccreditationUpload = async (
     return { error: "Error inserting accreditation data into database" };
   }
 
-  return { success: true };
+  const newAccreditation: UserAccreditation = {
+    isExpired: new Date(expiryDate) < new Date(),
+    fileUrl: fileData?.path
+      ? supabase.storage
+          .from("accreditation-certificates")
+          .getPublicUrl(fileData.path).data.publicUrl
+      : null,
+    id: accreditationId,
+    expiry_date: expiryDate,
+    file_path: fileData?.path || null,
+    service_accreditations: {
+      name: service,
+    },
+  };
+  return {
+    success: true,
+    message: "Upload Successful",
+    accreditation: newAccreditation,
+  };
 };

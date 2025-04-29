@@ -8,12 +8,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@radix-ui/react-dropdown-menu";
+} from "@/components/ui/dropdown-menu"; // ✅
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, FileText, MoreHorizontal } from "lucide-react";
 import { Button } from "../../ui/button";
 import { Badge } from "../../ui/badge";
 import Link from "next/link";
+import { deleteAccreditation } from "@/app/utils/helpers/deleteAccreditation";
 
 export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [
   {
@@ -56,7 +57,6 @@ export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [
       // Access nested property
       const name = row.original.service_accreditations?.name;
 
-      console.log(name);
       return <div>{name}</div>;
     },
   },
@@ -126,7 +126,7 @@ export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [
               </Button>
             </Link>
           ) : (
-            <span className="text-muted-foreground text-sm">No file</span>
+            <p className="text-muted-foreground text-sm text-center">No file</p>
           )}
         </div>
       );
@@ -137,6 +137,7 @@ export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const certificate = row.original;
+      const fileUrl = row.original.fileUrl;
 
       return (
         <DropdownMenu>
@@ -146,19 +147,26 @@ export const UserAccreditationTableColumns: ColumnDef<UserAccreditation>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent
+            align="end"
+            className="w-56
+          "
+          >
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(certificate.id)}
-            >
-              Copy certificate ID
-            </DropdownMenuItem>
             <DropdownMenuSeparator />
             {certificate.file_path && (
-              <DropdownMenuItem>Download certificate</DropdownMenuItem>
+              <Link href={`${fileUrl}`} target="_blank">
+                <DropdownMenuItem>Download certificate</DropdownMenuItem>
+              </Link>
             )}
-            <DropdownMenuItem>View details</DropdownMenuItem>
             <DropdownMenuItem>Renew certificate</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                deleteAccreditation(certificate);
+              }}
+            >
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
