@@ -1,4 +1,4 @@
-import { login } from "@/app/actions/login";
+import { loginWithEmailPassword } from "@/app/utils/auth/loginWithEmailPassword";
 import { cn } from "@/app/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,7 +51,7 @@ export function LoginForm({
                 <Input id="password" name="password" type="password" required />
               </div>
               <Button
-                formAction={login}
+                formAction={loginWithEmailPassword}
                 type="submit"
                 className="w-full bg-brand text-white cursor-pointer"
               >

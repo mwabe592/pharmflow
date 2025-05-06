@@ -5,6 +5,7 @@ import { UserAccreditationTable } from "./UserAccreditationTable";
 import { deleteAccreditation } from "@/app/utils/helpers/deleteAccreditation";
 import { UserAccreditation } from "@/app/types/accreditation.types";
 import { Service } from "@/app/types/services.types";
+import { ColumnDef } from "@tanstack/react-table";
 
 export function UserAccreditationTableWrapper({
   initialAccreditations,
@@ -13,7 +14,7 @@ export function UserAccreditationTableWrapper({
   staffId,
 }: {
   initialAccreditations: UserAccreditation[];
-  columns: any;
+  columns: ColumnDef<UserAccreditation>[];
   services: Service[];
   staffId: string;
 }) {

@@ -21,6 +21,7 @@ const Navbar = async () => {
     .select("*")
     .eq("profile_id", user?.id)
     .single();
+  console.log("user is:", staffProfile);
 
   if (staffError) {
     console.error("Error fetching staff profile:", staffError.message);

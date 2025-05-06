@@ -18,23 +18,17 @@ import { Button } from "@/components/ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { cn } from "@/app/lib/utils";
-import { useEffect, useState } from "react";
-import { getPharmacies } from "@/app/actions/getpharmacies";
-import { Pharmacies } from "@/app/types/tables.types";
+import { useState } from "react";
 
-const PharmacySelect = () => {
+import { Pharmacies } from "@/app/types/tables.types";
+type PharmacySelectProps = {
+  pharmacies: Pharmacies[];
+};
+const PharmacySelect = ({ pharmacies }: PharmacySelectProps) => {
   const [open, setOpen] = useState(false);
   const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacies | null>(
     null
   );
-  const [pharmacies, setPharmacies] = useState<Pharmacies[]>([]);
-  useEffect(() => {
-    const getData = async () => {
-      const pharmacies: Pharmacies[] = await getPharmacies();
-      setPharmacies(pharmacies);
-    };
-    getData();
-  }, []);
 
   return (
     <div className="space-y-2">

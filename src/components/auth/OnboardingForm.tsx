@@ -3,14 +3,21 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-import completeonboarding from "@/app/actions/completeonboarding";
+import completeonboarding from "@/app/utils/helpers/completeonboarding";
 
 import RoleSelect from "./RoleSelect";
 import PharmacySelect from "../dashboard/PharmacySelect";
-export default function OnboardingForm() {
+import { Pharmacies } from "@/app/types/tables.types";
+
+type OnboardingFormProps = {
+  pharmacies: Pharmacies[];
+};
+export default function OnboardingForm({ pharmacies }: OnboardingFormProps) {
   const handleFormSubmit = async (formData: FormData) => {
     try {
-      await completeonboarding(formData);
+      const response = await completeonboarding(formData);
+
+      console.log("response from onboarding is:", response);
     } catch (error) {
       console.error("Error completing onboarding:", error);
       return;
@@ -55,7 +62,7 @@ export default function OnboardingForm() {
             />
           </div>
 
-          <PharmacySelect />
+          <PharmacySelect pharmacies={pharmacies} />
           <RoleSelect />
           <Button type="submit" className="w-full">
             Submit
