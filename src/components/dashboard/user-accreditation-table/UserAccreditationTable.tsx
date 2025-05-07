@@ -61,7 +61,7 @@ export function UserAccreditationTable({
   showPagination = true,
   onUploadSuccess,
 }: UserAccreditationTableProps) {
-  const [accreditations, setAccreditations] = useState(data);
+  const [accreditations] = useState(data);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
