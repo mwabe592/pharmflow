@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      managers: {
+        Row: {
+          created_at: string | null;
+          email: string | null;
+          first_name: string;
+          last_name: string;
+          manager_id: string;
+          pharmacy_id: string | null;
+          phone: string | null;
+          profile_id: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          email?: string | null;
+          first_name: string;
+          last_name: string;
+          manager_id?: string;
+          pharmacy_id?: string | null;
+          phone?: string | null;
+          profile_id?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          email?: string | null;
+          first_name?: string;
+          last_name?: string;
+          manager_id?: string;
+          pharmacy_id?: string | null;
+          phone?: string | null;
+          profile_id?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "managers_pharmacy_id_fkey";
+            columns: ["pharmacy_id"];
+            isOneToOne: false;
+            referencedRelation: "pharmacies";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "managers_profile_id_fkey";
+            columns: ["profile_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       pharmacies: {
         Row: {
           address: string;
@@ -87,41 +138,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      profiles: {
-        Row: {
-          created_at: string | null;
-          id: string;
-          pharmacy_id: string | null;
-          profile_completed: boolean | null;
-          role: string | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          id: string;
-          pharmacy_id?: string | null;
-          profile_completed?: boolean | null;
-          role?: string | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: string;
-          pharmacy_id?: string | null;
-          profile_completed?: boolean | null;
-          role?: string | null;
-          updated_at?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "profiles_pharmacy_id_fkey";
-            columns: ["pharmacy_id"];
-            isOneToOne: false;
-            referencedRelation: "pharmacies";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
       reminder_logs: {
         Row: {
           id: string;
@@ -150,6 +166,24 @@ export type Database = {
             referencedColumns: ["id"];
           },
         ];
+      };
+      role_permissions: {
+        Row: {
+          id: number;
+          permission: Database["public"]["Enums"]["user_permission"];
+          role: Database["public"]["Enums"]["user_role"];
+        };
+        Insert: {
+          id?: number;
+          permission: Database["public"]["Enums"]["user_permission"];
+          role: Database["public"]["Enums"]["user_role"];
+        };
+        Update: {
+          id?: number;
+          permission?: Database["public"]["Enums"]["user_permission"];
+          role?: Database["public"]["Enums"]["user_role"];
+        };
+        Relationships: [];
       };
       service_accreditations: {
         Row: {
@@ -244,7 +278,7 @@ export type Database = {
             foreignKeyName: "staff_profile_id_fkey";
             columns: ["profile_id"];
             isOneToOne: false;
-            referencedRelation: "profiles";
+            referencedRelation: "users";
             referencedColumns: ["id"];
           },
         ];
@@ -281,7 +315,7 @@ export type Database = {
           {
             foreignKeyName: "staff_accreditations_service_accreditation_id_fkey";
             columns: ["service_accreditation_id"];
-            isOneToOne: true;
+            isOneToOne: false;
             referencedRelation: "service_accreditations";
             referencedColumns: ["id"];
           },
@@ -294,15 +328,111 @@ export type Database = {
           },
         ];
       };
+      user_roles: {
+        Row: {
+          id: number;
+          pharmacy_id: string;
+          role: Database["public"]["Enums"]["user_role"];
+          user_id: string;
+        };
+        Insert: {
+          id?: number;
+          pharmacy_id: string;
+          role: Database["public"]["Enums"]["user_role"];
+          user_id: string;
+        };
+        Update: {
+          id?: number;
+          pharmacy_id?: string;
+          role?: Database["public"]["Enums"]["user_role"];
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_pharmacy_id_fkey";
+            columns: ["pharmacy_id"];
+            isOneToOne: false;
+            referencedRelation: "pharmacies";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "user_roles_user_id_fkey1";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      users: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          pharmacy_id: string | null;
+          profile_completed: boolean | null;
+          role: string;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          id: string;
+          pharmacy_id?: string | null;
+          profile_completed?: boolean | null;
+          role?: string;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          pharmacy_id?: string | null;
+          profile_completed?: boolean | null;
+          role?: string;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "profiles_pharmacy_id_fkey";
+            columns: ["pharmacy_id"];
+            isOneToOne: false;
+            referencedRelation: "pharmacies";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      authorize: {
+        Args: {
+          requested_permission: Database["public"]["Enums"]["user_permission"];
+        };
+        Returns: boolean;
+      };
+      custom_access_token_hook: {
+        Args: { event: Json };
+        Returns: Json;
+      };
     };
     Enums: {
       status_enum: "active" | "on leave" | "inactive";
+      user_permission:
+        | "profiles.read"
+        | "profiles.create"
+        | "profiles.update"
+        | "profiles.delete"
+        | "staff.read"
+        | "staff.create"
+        | "staff.update"
+        | "staff.delete"
+        | "staff_accreditations.read"
+        | "staff_accreditations.create"
+        | "staff_accreditations.update"
+        | "staff_accreditations.delete"
+        | "pharmacy.read"
+        | "pharmacy.update";
+      user_role: "manager" | "staff";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -419,6 +549,23 @@ export const Constants = {
   public: {
     Enums: {
       status_enum: ["active", "on leave", "inactive"],
+      user_permission: [
+        "profiles.read",
+        "profiles.create",
+        "profiles.update",
+        "profiles.delete",
+        "staff.read",
+        "staff.create",
+        "staff.update",
+        "staff.delete",
+        "staff_accreditations.read",
+        "staff_accreditations.create",
+        "staff_accreditations.update",
+        "staff_accreditations.delete",
+        "pharmacy.read",
+        "pharmacy.update",
+      ],
+      user_role: ["manager", "staff"],
     },
   },
 } as const;

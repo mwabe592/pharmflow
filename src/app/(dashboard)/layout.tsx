@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import Navbar from "@/components/dashboard/Navbar";
 import { createClient } from "../utils/supabase/server";
 import { redirect } from "next/navigation";
+import { getUserRoleFromToken } from "../utils/auth/getUserRole";
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const supabase = await createClient();
 
@@ -28,6 +29,18 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/login");
   }
 
+  const session = await supabase.auth.getSession();
+  const accessToken = session?.data.session?.access_token;
+
+  console.log("user", user);
+  if (accessToken) {
+    const userRole = getUserRoleFromToken(accessToken);
+
+    if (userRole !== "manager") {
+      // redirect("/error");
+    }
+  }
+  console.log("session is:", session.data.session?.access_token);
   return (
     <SidebarProvider>
       <AppSidebar variant="inset" />

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "update-types": "npx supabase gen types --lang=typescript --project-id \"$PROJECT_REF\" > database.types.ts"
+    "update-types": "npx supabase gen types --lang=typescript --project-id \"$PROJECT_REF\" > src/app/types/database.types.ts"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.1.4",
