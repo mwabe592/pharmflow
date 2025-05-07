@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { UserAccreditationTable } from "./UserAccreditationTable";
-import { deleteAccreditation } from "@/app/utils/helpers/deleteAccreditation";
 import { UserAccreditation } from "@/app/types/accreditation.types";
 import { Service } from "@/app/types/services.types";
+import { ColumnDef } from "@tanstack/react-table";
 
 export function UserAccreditationTableWrapper({
   initialAccreditations,
@@ -13,7 +13,7 @@ export function UserAccreditationTableWrapper({
   staffId,
 }: {
   initialAccreditations: UserAccreditation[];
-  columns: any;
+  columns: ColumnDef<UserAccreditation>[];
   services: Service[];
   staffId: string;
 }) {
@@ -21,16 +21,6 @@ export function UserAccreditationTableWrapper({
 
   const handleUploadSuccess = (newAccreditation: UserAccreditation) => {
     setAccreditations((prev) => [...prev, newAccreditation]);
-  };
-
-  const handleDelete = async (accreditation: UserAccreditation) => {
-    const response = await deleteAccreditation(accreditation);
-
-    if (response.success) {
-      setAccreditations((prev) =>
-        prev.filter((a) => a.id !== accreditation.id)
-      );
-    }
   };
 
   return (

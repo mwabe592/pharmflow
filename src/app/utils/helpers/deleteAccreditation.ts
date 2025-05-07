@@ -20,7 +20,7 @@ export async function deleteAccreditation(accreditation: UserAccreditation) {
 
   //if file present, delete file from the storage bucket
   if (accreditation.fileUrl) {
-    const { data: storageData, error } = await supabase.storage
+    const { data: storageData } = await supabase.storage
       .from("accreditation-certificates")
       .remove([`${accreditation.file_path}`]);
 
