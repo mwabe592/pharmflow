@@ -7,15 +7,13 @@ export async function GET(request: Request) {
   // Use either the 'next' param or default to '/dashboard'
   const next = searchParams.get("next") ?? "/dashboard";
 
-  console.log("code is:", code);
   if (!code) {
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-  console.log("google error is:", error);
   if (error) {
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
@@ -28,13 +26,11 @@ export async function GET(request: Request) {
     return NextResponse.redirect(`${origin}/auth/auth-code-error`);
   }
 
-  const { data: userProfile, error: profileError } = await supabase
+  const { data: onboardingData, error: profileError } = await supabase
     .from("users")
     .select("onboarded")
     .eq("id", user.id)
     .single();
-
-  console.log("user profile is:", userProfile);
 
   if (profileError) {
     console.error("Failed to fetch onboarding status:", profileError);
@@ -42,9 +38,8 @@ export async function GET(request: Request) {
   }
 
   // Determine final redirect URL based on onboarding status
-  const finalRedirect = userProfile?.onboarded ? next : "/onboarding"; // If not onboarded, always go to onboarding
+  const finalRedirect = onboardingData?.onboarded ? next : "/onboarding"; // If not onboarded, always go to onboarding
 
-  console.log('next is:', next)
   // Handle environment-specific redirect
   const forwardedHost = request.headers.get("x-forwarded-host");
   const isLocalEnv = process.env.NODE_ENV === "development";

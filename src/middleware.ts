@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
   if (user) {
     const { data } = await supabase
-      .from("profiles")
+      .from("users")
       .select("profile_completed")
       .eq("id", user?.id)
       .single();
