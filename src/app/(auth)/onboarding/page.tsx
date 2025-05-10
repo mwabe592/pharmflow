@@ -6,7 +6,7 @@ const OnboardingPage = async () => {
   const pharmacies = await getPharmacies();
 
   return (
-    <div className="container relative min-h-screen flex items-center justify-center py-10 sm:m-5">
+    <div className="container relative min-h-screen flex items-center justify-center py-10 px-5">
       <OnboardingFlow />
     </div>
   );

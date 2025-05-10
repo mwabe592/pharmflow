@@ -27,11 +27,8 @@ export function DecisionScreen({ onSelect }: DecisionScreenProps) {
     <div className="space-y-6">
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">
-          Welcome to Pharmacy Accreditation Manager
+          How do you plan on using the platform?
         </h1>
-        <p className="text-muted-foreground">
-          Please select how you'll be using the platform
-        </p>
       </div>
 
       <div className="grid gap-6 mt-8">
@@ -46,7 +43,7 @@ export function DecisionScreen({ onSelect }: DecisionScreenProps) {
           <div className="absolute inset-x-0 top-0 h-1 bg-[#5e8e4b]"></div>
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-[#5e8e4b]" />I manage a
+              <Building2 className="h-5 w-5 text-[#5e8e4b]" />I manage or own a
               pharmacy
             </CardTitle>
             <CardDescription>
@@ -82,7 +79,7 @@ export function DecisionScreen({ onSelect }: DecisionScreenProps) {
           <CardContent>
             <p className="text-sm text-muted-foreground">
               Ideal for individual pharmacists, technicians, and pharmacy
-              professionals who want to track their personal certifications and
+              professionals who want to track their own certificates and
               accreditations.
             </p>
           </CardContent>

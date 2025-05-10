@@ -17,11 +17,7 @@ export function OnboardingFlow() {
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
-    email: "",
-    role: "",
     pharmacyName: "",
-    pharmacyAddress: "",
-    pharmacyPhone: "",
   });
 
   const handlePathSelection = (type: UserType) => {
@@ -47,7 +43,7 @@ export function OnboardingFlow() {
   const totalSteps = 3;
 
   return (
-    <div className="w-full max-w-2xl">
+    <div className="w-full max-w-2xl sm:p-5">
       <OnboardingSteps currentStep={stepNumber} totalSteps={totalSteps} />
 
       <AnimatePresence mode="wait">
