@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      accreditations: {
+        Row: {
+          created_at: string | null;
+          expiry_date: string;
+          file_path: string | null;
+          id: string;
+          service_accreditation_id: string | null;
+          updated_at: string | null;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          expiry_date: string;
+          file_path?: string | null;
+          id?: string;
+          service_accreditation_id?: string | null;
+          updated_at?: string | null;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          expiry_date?: string;
+          file_path?: string | null;
+          id?: string;
+          service_accreditation_id?: string | null;
+          updated_at?: string | null;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "accreditations_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "staff_accreditations_service_accreditation_id_fkey";
+            columns: ["service_accreditation_id"];
+            isOneToOne: false;
+            referencedRelation: "service_accreditations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       pharmacies: {
         Row: {
           address: string;
@@ -32,6 +77,48 @@ export type Database = {
           updated_at?: string | null;
         };
         Relationships: [];
+      };
+      pharmacy_memberships: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          pharmacy_id: string;
+          role: string;
+          status: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string;
+          pharmacy_id: string;
+          role: string;
+          status?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          pharmacy_id?: string;
+          role?: string;
+          status?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_memberships_pharmacy_id_fkey";
+            columns: ["pharmacy_id"];
+            isOneToOne: false;
+            referencedRelation: "pharmacies";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pharmacy_memberships_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       pharmacy_service_offerings: {
         Row: {
@@ -87,41 +174,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      profiles: {
-        Row: {
-          created_at: string | null;
-          id: string;
-          pharmacy_id: string | null;
-          profile_completed: boolean | null;
-          role: string | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          id: string;
-          pharmacy_id?: string | null;
-          profile_completed?: boolean | null;
-          role?: string | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: string;
-          pharmacy_id?: string | null;
-          profile_completed?: boolean | null;
-          role?: string | null;
-          updated_at?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "profiles_pharmacy_id_fkey";
-            columns: ["pharmacy_id"];
-            isOneToOne: false;
-            referencedRelation: "pharmacies";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
       reminder_logs: {
         Row: {
           id: string;
@@ -146,7 +198,7 @@ export type Database = {
             foreignKeyName: "reminder_logs_staff_accreditation_id_fkey";
             columns: ["staff_accreditation_id"];
             isOneToOne: false;
-            referencedRelation: "staff_accreditations";
+            referencedRelation: "accreditations";
             referencedColumns: ["id"];
           },
         ];
@@ -192,105 +244,50 @@ export type Database = {
           },
         ];
       };
-      staff: {
+      users: {
         Row: {
           created_at: string | null;
-          email: string | null;
+          email: string;
           first_name: string;
+          id: string;
           last_name: string;
+          onboarded: boolean | null;
           pharmacy_id: string | null;
-          phone: string | null;
-          profile_id: string | null;
-          role: string;
-          staff_id: string;
-          status: Database["public"]["Enums"]["status_enum"];
+          phone: string;
           updated_at: string | null;
+          user_type: string | null;
         };
         Insert: {
           created_at?: string | null;
-          email?: string | null;
-          first_name: string;
-          last_name: string;
+          email?: string;
+          first_name?: string;
+          id?: string;
+          last_name?: string;
+          onboarded?: boolean | null;
           pharmacy_id?: string | null;
-          phone?: string | null;
-          profile_id?: string | null;
-          role: string;
-          staff_id?: string;
-          status?: Database["public"]["Enums"]["status_enum"];
+          phone?: string;
           updated_at?: string | null;
+          user_type?: string | null;
         };
         Update: {
           created_at?: string | null;
-          email?: string | null;
+          email?: string;
           first_name?: string;
+          id?: string;
           last_name?: string;
+          onboarded?: boolean | null;
           pharmacy_id?: string | null;
-          phone?: string | null;
-          profile_id?: string | null;
-          role?: string;
-          staff_id?: string;
-          status?: Database["public"]["Enums"]["status_enum"];
+          phone?: string;
           updated_at?: string | null;
+          user_type?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: "staff_pharmacy_id_fkey";
+            foreignKeyName: "profiles_pharmacy_id_fkey";
             columns: ["pharmacy_id"];
             isOneToOne: false;
             referencedRelation: "pharmacies";
             referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "staff_profile_id_fkey";
-            columns: ["profile_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      staff_accreditations: {
-        Row: {
-          created_at: string | null;
-          expiry_date: string;
-          file_path: string | null;
-          id: string;
-          service_accreditation_id: string | null;
-          staff_id: string;
-          updated_at: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          expiry_date: string;
-          file_path?: string | null;
-          id?: string;
-          service_accreditation_id?: string | null;
-          staff_id: string;
-          updated_at?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          expiry_date?: string;
-          file_path?: string | null;
-          id?: string;
-          service_accreditation_id?: string | null;
-          staff_id?: string;
-          updated_at?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "staff_accreditations_service_accreditation_id_fkey";
-            columns: ["service_accreditation_id"];
-            isOneToOne: true;
-            referencedRelation: "service_accreditations";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "staff_accreditations_staff_id_fkey";
-            columns: ["staff_id"];
-            isOneToOne: false;
-            referencedRelation: "staff";
-            referencedColumns: ["staff_id"];
           },
         ];
       };
@@ -302,7 +299,23 @@ export type Database = {
       [_ in never]: never;
     };
     Enums: {
+      app_role: "manager" | "staff" | "admin";
       status_enum: "active" | "on leave" | "inactive";
+      user_permission:
+        | "profiles.read"
+        | "profiles.create"
+        | "profiles.update"
+        | "profiles.delete"
+        | "staff.read"
+        | "staff.create"
+        | "staff.update"
+        | "staff.delete"
+        | "staff_accreditations.read"
+        | "staff_accreditations.create"
+        | "staff_accreditations.update"
+        | "staff_accreditations.delete"
+        | "pharmacy.read"
+        | "pharmacy.update";
     };
     CompositeTypes: {
       [_ in never]: never;
@@ -418,7 +431,24 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["manager", "staff", "admin"],
       status_enum: ["active", "on leave", "inactive"],
+      user_permission: [
+        "profiles.read",
+        "profiles.create",
+        "profiles.update",
+        "profiles.delete",
+        "staff.read",
+        "staff.create",
+        "staff.update",
+        "staff.delete",
+        "staff_accreditations.read",
+        "staff_accreditations.create",
+        "staff_accreditations.update",
+        "staff_accreditations.delete",
+        "pharmacy.read",
+        "pharmacy.update",
+      ],
     },
   },
 } as const;

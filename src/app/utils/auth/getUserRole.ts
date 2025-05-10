@@ -6,15 +6,15 @@ type MyJwtPayload = {
   iat: number;
   email: string;
   sub: string;
-  user_role?: string;
+  user_role: string; // required now
 };
 
-export function getUserRoleFromToken(accessToken: string): string {
+export function getUserRoleFromToken(token: string): string {
   try {
-    const decoded = jwtDecode<MyJwtPayload>(accessToken);
-    return decoded.user_role?.toLowerCase() || "staff";
+    const decoded = jwtDecode<MyJwtPayload>(token);
+    return decoded.user_role.toLowerCase();
   } catch (error) {
     console.error("Failed to decode JWT:", error);
-    return "staff"; // default role if not found
+    throw new Error("Invalid token");
   }
 }

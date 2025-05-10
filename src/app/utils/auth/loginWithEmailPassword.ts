@@ -1,42 +1,47 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/app/utils/supabase/server";
-import { getUserRoleFromToken } from "./getUserRole";
 
 export async function loginWithEmailPassword(formData: FormData) {
   const supabase = await createClient();
 
-  const data = {
+  const credentials = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
   };
 
-  const { data: loginData, error: logInError } =
-    await supabase.auth.signInWithPassword(data);
-  console.log("login data is:", loginData);
-  if (logInError) {
-    console.log("login error is:", logInError);
+  const { error } = await supabase.auth.signInWithPassword(credentials);
+
+  if (error) {
     redirect("/error");
   }
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (!session) redirect("/error");
+  if (!user || userError) {
+    throw new Error(userError?.message || "User not found");
+  }
 
-  const userRole = getUserRoleFromToken(session.access_token);
-  console.log("User role is now:", userRole);
+  const { data: onboardingData, error: onboardingDataError } = await supabase
+    .from("users")
+    .select("onboarded")
+    .eq("id", user.id)
+    .single();
+
+  if (onboardingDataError) {
+    throw new Error(onboardingDataError.message);
+  }
 
   revalidatePath("/", "layout");
 
-  if (userRole === "manager") {
-    redirect("/manager");
-  } else if (userRole === "staff") {
-    redirect("/staff");
-  } else {
-    redirect("/dashboard");
+  // 🔁 Check onboarding status
+  if (!onboardingData?.onboarded) {
+    redirect("/onboarding");
   }
+
+  redirect("/dashboard");
 }

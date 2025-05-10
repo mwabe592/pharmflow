@@ -17,11 +17,10 @@ const Navbar = async () => {
 
   // Fetch the staff profile associated with the user
   const { data: staffProfile, error: staffError } = await supabase
-    .from("staff")
+    .from("users")
     .select("*")
     .eq("profile_id", user?.id)
     .single();
-  console.log("user is:", staffProfile);
 
   if (staffError) {
     console.error("Error fetching staff profile:", staffError.message);
