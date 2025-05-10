@@ -261,7 +261,7 @@ export type Database = {
           created_at?: string | null
           email?: string
           first_name?: string
-          id: string
+          id?: string
           last_name?: string
           onboarded?: boolean | null
           pharmacy_id?: string | null
