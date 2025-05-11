@@ -241,7 +241,37 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "pharmacy_services";
             referencedColumns: ["id"];
-          },
+          }
+        ];
+      };
+      users: {
+        Row: {
+          created_at: string | null;
+          email: string;
+          first_name: string;
+          id: string;
+          last_name: string;
+          onboarded: boolean | null;
+          pharmacy_id: string | null;
+          phone: string;
+          updated_at: string | null;
+          user_type: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          email?: string;
+          first_name?: string;
+          id?: string;
+          last_name?: string;
+          onboarded?: boolean | null;
+          pharmacy_id?: string | null;
+          phone?: string;
+          updated_at?: string | null;
+          user_type?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          email?: string;
           first_name?: string;
           id?: string;
           last_name?: string;
@@ -258,90 +288,30 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: "pharmacies";
             referencedColumns: ["id"];
-          },
+          }
         ];
       };
     };
-=======
-        ]
-      }
-      users: {
-        Row: {
-          created_at: string | null
-          email: string
-          first_name: string
-          id: string
-          last_name: string
-          onboarded: boolean | null
-          pharmacy_id: string | null
-          phone: string
-          updated_at: string | null
-          user_type: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email?: string
-          first_name?: string
-          id?: string
-          last_name?: string
-          onboarded?: boolean | null
-          pharmacy_id?: string | null
-          phone?: string
-          updated_at?: string | null
-          user_type?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string
-          first_name?: string
-          id?: string
-          last_name?: string
-          onboarded?: boolean | null
-          pharmacy_id?: string | null
-          phone?: string
-          updated_at?: string | null
-          user_type?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_pharmacy_id_fkey"
-            columns: ["pharmacy_id"]
-            isOneToOne: false
-            referencedRelation: "pharmacies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-    }
->>>>>>> 74d49716c934fa05903ea870b082d23d1fb7a0ef
     Views: {
       [_ in never]: never;
     };
     Functions: {
-<<<<<<< HEAD
-      [_ in never]: never;
+      user_can_create_membership: {
+        Args: { uid: string; pharmacy: string };
+        Returns: boolean;
+      };
+      user_has_no_membership: {
+        Args: { uid: string };
+        Returns: boolean;
+      };
+      user_is_admin_of_pharmacy: {
+        Args: { uid: string; pharmacy: string };
+        Returns: boolean;
+      };
     };
     Enums: {
       app_role: "manager" | "staff" | "admin";
       status_enum: "active" | "on leave" | "inactive";
-=======
-      user_can_create_membership: {
-        Args: { uid: string; pharmacy: string }
-        Returns: boolean
-      }
-      user_has_no_membership: {
-        Args: { uid: string }
-        Returns: boolean
-      }
-      user_is_admin_of_pharmacy: {
-        Args: { uid: string; pharmacy: string }
-        Returns: boolean
-      }
-    }
-    Enums: {
-      app_role: "manager" | "staff" | "admin"
-      status_enum: "active" | "on leave" | "inactive"
->>>>>>> 74d49716c934fa05903ea870b082d23d1fb7a0ef
       user_permission:
         | "profiles.read"
         | "profiles.create"
@@ -356,13 +326,8 @@ export type Database = {
         | "staff_accreditations.update"
         | "staff_accreditations.delete"
         | "pharmacy.read"
-<<<<<<< HEAD
         | "pharmacy.update";
     };
-=======
-        | "pharmacy.update"
-    }
->>>>>>> 74d49716c934fa05903ea870b082d23d1fb7a0ef
     CompositeTypes: {
       [_ in never]: never;
     };
