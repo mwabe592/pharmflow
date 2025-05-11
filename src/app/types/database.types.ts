@@ -114,7 +114,7 @@ export type Database = {
           {
             foreignKeyName: "pharmacy_memberships_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -296,7 +296,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      user_can_create_membership: {
+        Args: { uid: string; pharmacy: string }
+        Returns: boolean
+      }
+      user_has_no_membership: {
+        Args: { uid: string }
+        Returns: boolean
+      }
+      user_is_admin_of_pharmacy: {
+        Args: { uid: string; pharmacy: string }
+        Returns: boolean
+      }
     }
     Enums: {
       app_role: "manager" | "staff" | "admin"
