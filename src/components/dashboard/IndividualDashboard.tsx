@@ -20,7 +20,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { User } from "@/app/types/tables.types";
 
 type UserData = {
   pharmacy_name: string | null;
@@ -196,7 +195,7 @@ export default function IndividualDashboard({ user }: DashboardProps) {
           <CardHeader>
             <CardTitle>Pharmacy Affiliations</CardTitle>
             <CardDescription>
-              Organizations you're associated with
+              Organizations you are associated with
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

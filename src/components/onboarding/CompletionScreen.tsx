@@ -13,10 +13,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import type { UserType } from "./OnboardingFlow";
+import type { UserData, UserType } from "./OnboardingFlow";
 interface CompletionScreenProps {
   userType: UserType;
-  userData: any;
+  userData: UserData;
 }
 
 export function CompletionScreen({

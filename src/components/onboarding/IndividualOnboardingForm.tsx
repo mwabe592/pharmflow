@@ -23,11 +23,12 @@ import {
 } from "@/components/ui/select";
 
 import { submitIndividualOnboarding } from "@/app/actions/submitIndividualOnboarding";
+import { IndividualUserData } from "./OnboardingFlow";
 
-interface IndividualOnboardingFormProps {
-  onSubmit: (data: any) => void;
+type IndividualOnboardingFormProps = {
+  onSubmit: (data: IndividualUserData) => void;
   onBack: () => void;
-}
+};
 
 const initialState = {
   message: "",
@@ -97,17 +98,6 @@ export function IndividualOnboardingForm({
                 minLength={2}
               />
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              placeholder="Enter your email address"
-              type="email"
-              required
-            />
           </div>
 
           <div className="space-y-2">

@@ -10,6 +10,31 @@ import { OnboardingSteps } from "./OnboardingSteps";
 
 export type OnboardingStep = "decision" | "form" | "completion";
 export type UserType = "admin" | "individual" | null;
+export type UserData = {
+  firstName: string;
+  lastName: string;
+  pharmacyName: string;
+};
+
+// Shared fields
+export type SharedUserData = {
+  firstName: string;
+  lastName: string;
+};
+
+// Specific types
+export type AdminUserData = SharedUserData & {
+  pharmacyName: string;
+};
+
+export type IndividualUserData = SharedUserData & {
+  role: string;
+};
+
+// Union type with discriminant
+type OnboardingFormData =
+  | { userType: "admin"; data: AdminUserData }
+  | { userType: "individual"; data: IndividualUserData };
 
 export function OnboardingFlow() {
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("decision");
@@ -25,8 +50,25 @@ export function OnboardingFlow() {
     setCurrentStep("form");
   };
 
-  const handleFormSubmit = (data: any) => {
-    setUserData({ ...userData, ...data });
+  const handleFormSubmit = (form: OnboardingFormData) => {
+    const { data, userType } = form;
+
+    if (userType === "admin") {
+      // do something with AdminUserData
+      setUserData({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        pharmacyName: data.pharmacyName,
+      });
+    } else {
+      // do something with IndividualUserData
+      setUserData({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        pharmacyName: "", // fallback if needed
+      });
+    }
+
     setCurrentStep("completion");
   };
 
@@ -70,7 +112,7 @@ export function OnboardingFlow() {
             className="mt-8"
           >
             <AdminOnboardingForm
-              onSubmit={handleFormSubmit}
+              onSubmit={(data) => handleFormSubmit({ userType: "admin", data })}
               onBack={handleGoBack}
             />
           </motion.div>
@@ -86,7 +128,9 @@ export function OnboardingFlow() {
             className="mt-8"
           >
             <IndividualOnboardingForm
-              onSubmit={handleFormSubmit}
+              onSubmit={(data) =>
+                handleFormSubmit({ userType: "individual", data })
+              }
               onBack={handleGoBack}
             />
           </motion.div>

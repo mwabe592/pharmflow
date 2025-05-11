@@ -3,8 +3,19 @@
 import { TablesInsert } from "../types/database.types";
 import { createClient } from "../utils/supabase/server";
 
+type PreviousState = {
+  message: string;
+  success: boolean;
+  error: string;
+  data: {
+    firstName: string;
+    lastName: string;
+    pharmacyName: string;
+  };
+};
+
 export async function submitAdminOnboarding(
-  prevState: any,
+  prevState: PreviousState,
   formData: FormData
 ) {
   const pharmacyName = formData.get("pharmacyName") as string;

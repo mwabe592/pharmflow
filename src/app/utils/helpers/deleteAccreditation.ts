@@ -7,7 +7,7 @@ export async function deleteAccreditation(accreditation: UserAccreditation) {
 
   //delete accreditation from staff_accreditation table
   const { data: deletedAccreditation, error: deletingError } = await supabase
-    .from("staff_accreditations")
+    .from("accreditations")
     .delete()
     .eq("id", accreditation.id)
     .select();

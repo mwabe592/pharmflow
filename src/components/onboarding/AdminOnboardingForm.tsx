@@ -15,11 +15,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { submitAdminOnboarding } from "@/app/actions/submitAdminOnboarding";
+import type { AdminUserData } from "./OnboardingFlow";
 
-interface AdminOnboardingFormProps {
-  onSubmit: (data: any) => void;
+type AdminOnboardingFormProps = {
+  onSubmit: (data: AdminUserData) => void;
   onBack: () => void;
-}
+};
 
 // Define the initial state for the action
 const initialState = {

@@ -9,6 +9,7 @@ import {
 import { Header } from "@/components/dashboard/Header";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
 import { AuthProvider } from "../contexts/Authcontext";
+import getUser from "../utils/helpers/getUser";
 
 export const metadata: Metadata = {
   title: "Dashboard | Pharmacy Accreditation Manager",
@@ -19,14 +20,36 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default async function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
   // In a real app, you would fetch this from your auth provider
-  const user = {
-    name: "Sarah Johnson",
-    email: "sarah.johnson@example.com",
-    image: "/placeholder.svg?height=32&width=32",
-    role: "admin", // or "individual"
-  };
+  // const user = {
+  //   name: "Sarah Johnson",
+  //   email: "sarah.johnson@example.com",
+  //   image: "/placeholder.svg?height=32&width=32",
+  //   role: "admin", // or "individual"
+  // };
+
+  const { userData } = await getUser();
+
+  const normalizedUserForHeader = userData
+    ? {
+        name: `${userData.first_name} ${userData.last_name}`,
+        email: userData.email,
+        image: "/placeholder.svg", // Replace with actual image path or logic
+        role: userData.user_type ?? "user",
+      }
+    : null;
+
+  const normalizedUserForNav = userData
+    ? {
+        first_name: userData.first_name,
+        last_name: userData.last_name,
+        email: userData.email,
+        role: userData.user_type ?? "user",
+      }
+    : null;
 
   return (
     <AuthProvider>
@@ -42,12 +65,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </div>
             </SidebarHeader>
             <SidebarContent>
-              <DashboardNav user={user} />
+              {normalizedUserForNav && (
+                <DashboardNav user={normalizedUserForNav} />
+              )}{" "}
             </SidebarContent>
           </Sidebar>
 
           <div className="flex flex-1 flex-col">
-            <Header user={user} />
+            {normalizedUserForHeader && (
+              <Header user={normalizedUserForHeader} />
+            )}{" "}
             <main className="flex-1 p-4 md:p-6 lg:p-8">{children}</main>
           </div>
         </div>

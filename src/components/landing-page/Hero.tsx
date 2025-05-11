@@ -14,7 +14,9 @@ export default function Hero() {
           ease.
         </p>
         <Button className="w-full bg-brand hover:bg-brand/90 text-white">
-          <Link href="/login">Get Started</Link>
+          <Link href="/login" className="w-full bg-brand text-white">
+            Get Started
+          </Link>
         </Button>
       </div>
     </section>

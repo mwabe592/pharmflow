@@ -2,8 +2,18 @@
 
 import { createClient } from "../utils/supabase/server";
 
+type PreviousState = {
+  message: string;
+  success: boolean;
+  error: string;
+  data: {
+    firstName: string;
+    lastName: string;
+    role: string;
+  };
+};
 export async function submitIndividualOnboarding(
-  prevState: any,
+  prevState: PreviousState,
   formData: FormData
 ) {
   const firstName = formData.get("firstName") as string;
@@ -29,7 +39,6 @@ export async function submitIndividualOnboarding(
       email: user.email,
       onboarded: true,
       user_type: "individual",
-      role,
     });
 
   if (!onboardingData && onboardingError) {

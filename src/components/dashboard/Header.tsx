@@ -19,7 +19,7 @@ interface HeaderProps {
 }
 
 export function Header({ user }: HeaderProps) {
-  const { toggleSidebar, isMobile } = useSidebar();
+  const { toggleSidebar } = useSidebar();
   const [notifications] = useState(3);
 
   return (

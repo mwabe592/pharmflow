@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  AlertTriangle,
   Users,
   Clock,
   CheckCircle,
@@ -20,7 +19,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 
 type UserData = {
   pharmacy_name: string | null;
@@ -45,8 +43,8 @@ export default function AdminDashboard({ user }: DashboardProps) {
             {user?.pharmacy_name}
           </h1>
           <p className="text-muted-foreground">
-            Welcome back, {user?.first_name}. Here's what's happening with your
-            pharmacy accreditations.
+            Welcome back, {user?.first_name}. Here is what is happening with
+            your pharmacy accreditations.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -285,7 +283,7 @@ export default function AdminDashboard({ user }: DashboardProps) {
                 </Avatar>
                 <div className="space-y-1">
                   <p className="text-sm font-medium leading-none">
-                    Robert Williams'{" "}
+                    Robert Williams{" "}
                     <span className="font-semibold">HIPAA Certification</span>{" "}
                     is expiring soon
                   </p>
