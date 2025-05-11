@@ -17,7 +17,7 @@ async function fetchPharmacyId() {
   }
 
   const { data: pharmacyData, error: profileError } = await supabase
-    .from("profiles")
+    .from("pharmacy_memberships")
     .select("pharmacy_id")
     .eq("id", user.id)
     .single();

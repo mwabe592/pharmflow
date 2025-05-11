@@ -17,7 +17,7 @@ export async function fetchAccreditationsById(staffId: string) {
   const currentDate = new Date().toISOString().split("T")[0];
 
   const accreditationsQuery = supabase
-    .from("staff_accreditations")
+    .from("accreditations")
     .select(
       `
       id,

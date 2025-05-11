@@ -1,5 +1,4 @@
-import { createClient } from "../utils/supabase/client";
-
+import { createClient } from "../supabase/server";
 export const getPharmacies = async () => {
   const supabase = await createClient();
   const { data, error } = await supabase.from("pharmacies").select("*");

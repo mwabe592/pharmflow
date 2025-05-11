@@ -1,18 +1,12 @@
-"use server";
-import OnboardingForm from "@/components/auth/OnboardingForm";
+import { OnboardingFlow } from "@/components/onboarding/OnboardingFlow";
 import React from "react";
 
-const page = () => {
+const OnboardingPage = async () => {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        {/* Onboarding Form */}
-        <h1 className="text-3xl font-bold text-center">Welcome 👋</h1>
-        <p className="text-center">Let us know more about yourself</p>
-        <OnboardingForm />
-      </div>
+    <div className="container relative min-h-screen flex items-center justify-center py-10 px-5">
+      <OnboardingFlow />
     </div>
   );
 };
 
-export default page;
+export default OnboardingPage;

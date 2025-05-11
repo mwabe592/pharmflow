@@ -1,6 +1,6 @@
 "use client";
 
-import { signout } from "@/app/actions/login";
+import { signout } from "@/app/utils/auth/signout";
 import { Button } from "../ui/button";
 
 const LogoutButton = () => {

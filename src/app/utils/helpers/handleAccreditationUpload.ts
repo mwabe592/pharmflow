@@ -9,7 +9,7 @@ type SelectedServiceProps = {
 };
 export const handleAccreditationUpload = async (
   formData: FormData,
-  { selectedService, staffId }: SelectedServiceProps
+  { selectedService }: SelectedServiceProps
 ) => {
   //   const supabase = await createClient();
 
@@ -63,21 +63,7 @@ export const handleAccreditationUpload = async (
     accreditationId = newAccreditation.id;
   }
 
-  //Add accreditation to database table
-  const { error: dbError } = await supabase
-    .from("staff_accreditations")
-    .insert([
-      {
-        staff_id: staffId,
-        service_accreditation_id: accreditationId,
-        expiry_date: expiryDate,
-        file_path: fileData.path, // Ensure this is correctly typed
-      },
-    ]);
-  if (dbError) {
-    console.error("Error inserting accreditation data into database:", dbError);
-    return { error: "Error inserting accreditation data into database" };
-  }
+  //Add accreditation to database table, look at doing this by inserting to the accreditatons table
 
   const newAccreditation: UserAccreditation = {
     isExpired: new Date(expiryDate) < new Date(),

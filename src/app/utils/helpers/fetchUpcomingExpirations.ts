@@ -4,7 +4,6 @@ export type FormattedExpiringData = {
   expiryDate: string;
   daysUntilExpiry: number;
   serviceName: string | null;
-  staffName: string;
 };
 
 export async function fetchUpcomingExpirations() {
@@ -24,7 +23,8 @@ export async function fetchUpcomingExpirations() {
         expiryDate: expiryDateObj.toLocaleDateString(),
         daysUntilExpiry,
         serviceName: d.service_accreditations?.name ?? null,
-        staffName: `${d.staff.first_name} ${d.staff.last_name}`,
+
+        //look at adding a staff member's name
       };
     });
 

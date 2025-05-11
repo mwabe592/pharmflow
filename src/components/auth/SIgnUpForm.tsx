@@ -1,4 +1,4 @@
-import { signup } from "@/app/actions/login";
+import { signup } from "@/app/utils/auth/signup";
 import { cn } from "@/app/lib/utils";
 import { Button } from "@/components/ui/button";
 import {

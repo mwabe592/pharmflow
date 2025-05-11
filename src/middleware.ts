@@ -10,12 +10,12 @@ export async function middleware(request: NextRequest) {
 
   if (user) {
     const { data } = await supabase
-      .from("profiles")
-      .select("profile_completed")
+      .from("users")
+      .select("onboarded")
       .eq("id", user?.id)
       .single();
 
-    if (data && !data.profile_completed) {
+    if (data && !data.onboarded) {
       return NextResponse.redirect(new URL("/onboarding", request.url));
     }
 

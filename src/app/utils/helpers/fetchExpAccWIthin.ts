@@ -11,7 +11,7 @@ export async function fetchExpiringAccreditationsWithin(daysAhead: number) {
   const futureDateISO = futureDate.toISOString().split("T")[0];
 
   const expiringAccreditationsQuery = supabase
-    .from("staff_accreditations")
+    .from("accreditations")
     .select(
       `
       id,

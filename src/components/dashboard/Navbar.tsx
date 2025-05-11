@@ -17,7 +17,7 @@ const Navbar = async () => {
 
   // Fetch the staff profile associated with the user
   const { data: staffProfile, error: staffError } = await supabase
-    .from("staff")
+    .from("users")
     .select("*")
     .eq("profile_id", user?.id)
     .single();
