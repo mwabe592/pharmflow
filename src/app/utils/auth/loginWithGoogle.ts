@@ -7,7 +7,7 @@ export const loginWithGoogle = async () => {
     const { error: googleLoginError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -17,4 +17,4 @@ export const loginWithGoogle = async () => {
   } catch (error) {
     console.error("Error logging in with Google:", error);
   }
-};
+}

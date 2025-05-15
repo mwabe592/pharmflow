@@ -23,14 +23,6 @@ interface DashboardLayoutProps {
 export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
-  // In a real app, you would fetch this from your auth provider
-  // const user = {
-  //   name: "Sarah Johnson",
-  //   email: "sarah.johnson@example.com",
-  //   image: "/placeholder.svg?height=32&width=32",
-  //   role: "admin", // or "individual"
-  // };
-
   const { userData } = await getUser();
 
   const normalizedUserForHeader = userData

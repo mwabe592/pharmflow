@@ -29,6 +29,8 @@ export default async function getUser() {
       }
 
       pharmacyName = pharmacyData?.name ?? null;
+
+      console.log("new pharmacy data is", pharmacyData);
     }
 
     return {
