@@ -8,6 +8,8 @@ export const loginWithGoogle = async () => {
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        scopes:
+          "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file",
       },
     });
 
@@ -17,4 +19,4 @@ export const loginWithGoogle = async () => {
   } catch (error) {
     console.error("Error logging in with Google:", error);
   }
-}
+};
