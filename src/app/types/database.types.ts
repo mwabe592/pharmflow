@@ -254,6 +254,7 @@ export type Database = {
           onboarded: boolean | null
           pharmacy_id: string | null
           phone: string
+          professional_role: string | null
           updated_at: string | null
           user_type: string | null
         }
@@ -266,6 +267,7 @@ export type Database = {
           onboarded?: boolean | null
           pharmacy_id?: string | null
           phone?: string
+          professional_role?: string | null
           updated_at?: string | null
           user_type?: string | null
         }
@@ -278,6 +280,7 @@ export type Database = {
           onboarded?: boolean | null
           pharmacy_id?: string | null
           phone?: string
+          professional_role?: string | null
           updated_at?: string | null
           user_type?: string | null
         }
@@ -296,6 +299,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      authorize: {
+        Args: { requested_permission: string }
+        Returns: boolean
+      }
+      custom_access_token_hook: {
+        Args: { event: Json }
+        Returns: Json
+      }
+      jwt_custom_claims: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       user_can_create_membership: {
         Args: { uid: string; pharmacy: string }
         Returns: boolean
