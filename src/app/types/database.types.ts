@@ -244,6 +244,32 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          id: number
+          pharmacy_id: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: number
+          pharmacy_id?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: number
+          pharmacy_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           created_at: string | null
@@ -325,6 +351,7 @@ export type Database = {
       }
     }
     Enums: {
+
       app_role: "manager" | "staff" | "admin"
       status_enum: "active" | "on leave" | "inactive"
       user_permission:
@@ -457,7 +484,6 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["manager", "staff", "admin"],
       status_enum: ["active", "on leave", "inactive"],
       user_permission: [
         "profiles.read",

@@ -8,6 +8,8 @@ export default async function DashboardPage() {
 
   const isAdmin = userData?.user_type === "admin";
 
+  
+
   return (
     <>
       {isAdmin ? (

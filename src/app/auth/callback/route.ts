@@ -1,54 +1,59 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@/app/utils/supabase/server";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  // Use either the 'next' param or default to '/dashboard'
+  // if "next" is in param, use it as the redirect URL
   const next = searchParams.get("next") ?? "/dashboard";
+  const cookieStore = await cookies();
 
-  if (!code) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+  if (code) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+
+    console.log("data from auth is:", data);
+    console.log("error from auth is:", error);
+    const googleAccessToken = data.session?.provider_token;
+    const googleRefreshToken = data.session?.provider_refresh_token;
+
+    if (!error && googleAccessToken) {
+      const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
+      const isLocalEnv = process.env.NODE_ENV === "development";
+      const response = isLocalEnv
+        ? NextResponse.redirect(`${origin}${next}`)
+        : NextResponse.redirect(`https://${forwardedHost}${next}`);
+
+      // Set secure HTTP-only cookies
+      cookieStore.set({
+        name: "google_access_token",
+        value: googleAccessToken,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        // Set expiry to 1 hour from now
+        maxAge: 3600,
+      });
+
+      if (!error && googleRefreshToken) {
+        cookieStore.set({
+          name: "google_refresh_token",
+          value: googleRefreshToken,
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+          // Refresh token has a longer lifetime
+          maxAge: 30 * 24 * 60 * 60, // 30 days
+        });
+      }
+
+      return response;
+    }
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-  if (error) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
-  }
-
-  // Check user onboarding status
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) {
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
-  }
-
-  const { data: onboardingData, error: profileError } = await supabase
-    .from("users")
-    .select("onboarded")
-    .eq("id", user.id)
-    .single();
-
-  if (profileError) {
-    console.error("Failed to fetch onboarding status:", profileError);
-    return NextResponse.redirect(`${origin}/auth/auth-code-error`);
-  }
-
-  // Determine final redirect URL based on onboarding status
-  const finalRedirect = onboardingData?.onboarded ? next : "/onboarding"; // If not onboarded, always go to onboarding
-
-  // Handle environment-specific redirect
-  const forwardedHost = request.headers.get("x-forwarded-host");
-  const isLocalEnv = process.env.NODE_ENV === "development";
-
-  if (isLocalEnv) {
-    return NextResponse.redirect(`${origin}${finalRedirect}`);
-  } else if (forwardedHost) {
-    return NextResponse.redirect(`https://${forwardedHost}${finalRedirect}`);
-  } else {
-    return NextResponse.redirect(`${origin}${finalRedirect}`);
-  }
+  // return the user to an error page with instructions
+  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }

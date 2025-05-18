@@ -7,7 +7,9 @@ export const loginWithGoogle = async () => {
     const { error: googleLoginError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${window.location.origin}/auth/callback`,
+        scopes:
+          "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file",
       },
     });
 
