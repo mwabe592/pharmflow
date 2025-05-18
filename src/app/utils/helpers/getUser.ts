@@ -4,6 +4,8 @@ export default async function getUser() {
   const supabase = await createClient();
   const user = await supabase.auth.getUser();
 
+  console.log("user is", user);
+
   if (user.data.user) {
     const { data: userData, error: userError } = await supabase
       .from("users")
@@ -29,8 +31,6 @@ export default async function getUser() {
       }
 
       pharmacyName = pharmacyData?.name ?? null;
-
-      console.log("new pharmacy data is", pharmacyData);
     }
 
     return {

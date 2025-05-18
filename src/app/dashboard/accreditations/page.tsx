@@ -14,9 +14,6 @@ export default function AccreditationsPage() {
       </div>
 
       {/* Your accreditations list would go here */}
-      <div className="border rounded-md p-8 text-center text-muted-foreground">
-        No accreditations found. Add your first accreditation to get started.
-      </div>
     </div>
   );
 }

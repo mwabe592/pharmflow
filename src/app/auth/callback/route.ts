@@ -13,6 +13,8 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
+    console.log("data from auth is:", data);
+    console.log("error from auth is:", error);
     const googleAccessToken = data.session?.provider_token;
     const googleRefreshToken = data.session?.provider_refresh_token;
 

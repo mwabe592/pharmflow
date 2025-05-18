@@ -8,7 +8,7 @@ export default async function DashboardPage() {
 
   const isAdmin = userData?.user_type === "admin";
 
-  // console.log(userData);
+  
 
   return (
     <>

@@ -105,7 +105,7 @@ export function AddMultipleAccreditationsModal() {
   const updateEntry = (
     id: number,
     field: keyof AccreditationEntry,
-    value: any
+    value: AccreditationType | Date | undefined
   ) => {
     setEntries(
       entries.map((entry) =>
@@ -147,8 +147,8 @@ export function AddMultipleAccreditationsModal() {
         <DialogHeader>
           <DialogTitle>Add Multiple Accreditations</DialogTitle>
           <DialogDescription>
-            Enter the details for each accreditation. Click upload when you're
-            done.
+            Let&apos;s add multiple accreditations. Click upload when
+            you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="space-y-4">

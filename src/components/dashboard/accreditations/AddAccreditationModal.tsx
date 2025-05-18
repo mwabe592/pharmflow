@@ -59,6 +59,7 @@ export function AddAccreditationModal() {
     AccreditationType | ""
   >("");
 
+  console.log("date is:", date, accreditationType);
 
   // Use the action state hook with the server action
   const [state, formAction, isPending] = useActionState(
@@ -103,7 +104,7 @@ export function AddAccreditationModal() {
           <DialogTitle>Add New Accreditation</DialogTitle>
           <DialogDescription>
             Enter the details of your new accreditation. Click upload when
-            you're done.
+            you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form action={handleFormAction} className="space-y-4">

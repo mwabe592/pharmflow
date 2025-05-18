@@ -46,6 +46,8 @@ const professionalRoles = [
   { value: "technician", label: "Pharmacy Technician" },
   { value: "intern", label: "Pharmacy Intern" },
   { value: "student", label: "Pharmacy Student" },
+  { value: "assistant", label: "Pharmacy Assistant" },
+  { value: "retail_manager", label: "Retail Manager" },
   { value: "manager", label: "Pharmacy Manager" },
   { value: "other", label: "Other Healthcare Professional" },
 ];

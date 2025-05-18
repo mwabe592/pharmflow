@@ -21,7 +21,7 @@ export type UploadAccreditationResult = {
   success: boolean;
   error?: string;
   message?: string;
-  data?: any;
+  data?: AccreditationData;
 };
 
 // Define the return type for the multiple upload action
@@ -33,8 +33,15 @@ export type UploadMultipleAccreditationsResult = {
     type: AccreditationType;
     success: boolean;
     error?: string;
-    data?: any;
+    data?: AccreditationData;
   }>;
+};
+
+// Define the accreditation data type
+type AccreditationData = {
+  name: string;
+  expiry_date: string;
+  documentUrl: string | null;
 };
 
 // Single accreditation upload
@@ -136,14 +143,16 @@ export async function uploadAccreditation(
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/accreditations");
 
+    const data: AccreditationData = {
+      name: accreditationType,
+      expiry_date: expiryDate,
+      documentUrl,
+    };
+
     return {
       success: true,
       message: `${accreditationType} accreditation added successfully`,
-      data: {
-        type: accreditationType,
-        expiryDate,
-        documentUrl,
-      },
+      data,
     };
   } catch (error) {
     console.error("Error in uploadAccreditation:", error);
@@ -256,14 +265,15 @@ export async function uploadMultipleAccreditations(
       });
 
       // Add success result
+      const data: AccreditationData = {
+        name: accreditationType,
+        expiry_date: expiryDate,
+        documentUrl,
+      };
       results.push({
         type: accreditationType,
         success: true,
-        data: {
-          type: accreditationType,
-          expiryDate,
-          documentUrl,
-        },
+        data,
       });
     }
 
