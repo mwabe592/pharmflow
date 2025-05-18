@@ -351,6 +351,8 @@ export type Database = {
       }
     }
     Enums: {
+
+      app_role: "manager" | "staff" | "admin"
       status_enum: "active" | "on leave" | "inactive"
       user_permission:
         | "profiles.read"
